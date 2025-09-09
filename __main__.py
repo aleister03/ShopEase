@@ -10,7 +10,6 @@ import hashlib
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
-# Configuration constants
 DELIVERY_CHARGE = Decimal('60.00')
 LOYALTY_POINTS_RATE = Decimal('0.01')  # 1% of discounted subtotal
 
@@ -84,8 +83,6 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        
-        # Try to find user in any role, prioritizing customer first
         user = execute_query(
             "SELECT * FROM Users WHERE email = %s AND status = 'active' ORDER BY FIELD(role, 'customer', 'seller', 'admin')",
             (email,), fetch=True
@@ -123,8 +120,6 @@ def signup():
         if password != confirm_password:
             flash('Passwords do not match', 'error')
             return render_template('signup.html')
-        
-        # Check if email exists
         existing_user = execute_query(
             "SELECT * FROM Users WHERE email = %s", (email,), fetch=True
         )
@@ -299,8 +294,6 @@ def view_cart():
         JOIN Products p ON i.productID = p.productID
         WHERE c.userID = %s
     """, (session['user_id'],), fetch=True)
-    
-    # Calculate totals with proper precision
     subtotal = currency_round(sum(Decimal(str(item['total_price'])) for item in cart_items))
     delivery_charge = DELIVERY_CHARGE if cart_items else Decimal('0.00')
     total_amount = currency_round(subtotal + delivery_charge)
@@ -346,7 +339,6 @@ def checkout():
         flash('Cart is empty', 'error')
         return redirect(url_for('view_cart'))
     
-    # Calculate with proper precision
     subtotal = currency_round(sum(Decimal(str(item['total_price'])) for item in cart_items))
     discount_amount = Decimal('0.00')
     
@@ -612,7 +604,6 @@ def wishlist():
     
     return render_template('customer/wishlist.html', wishlist_items=wishlist_items)
 
-# Also add this new route for moving from wishlist to cart
 @app.route('/customer/move_to_cart', methods=['POST'])
 @login_required('customer')
 def move_to_cart():
@@ -660,8 +651,6 @@ def move_to_cart():
 @login_required('customer')
 def add_to_wishlist():
     product_id = request.form['product_id']
-    
-    # Check if already in wishlist
     existing = execute_query(
         "SELECT * FROM Wishlist WHERE userID = %s AND productID = %s",
         (session['user_id'], product_id), fetch=True
@@ -723,7 +712,6 @@ def add_review():
 @app.route('/seller/dashboard')
 @login_required('seller')
 def seller_dashboard():
-    # Get seller's products
     products = execute_query("""
         SELECT p.*, i.pricePerUnit, i.currentStock, i.reorderLevel, i.inventoryID
         FROM Products p
@@ -732,7 +720,6 @@ def seller_dashboard():
         ORDER BY p.dateAdded DESC
     """, (session['user_id'],), fetch=True)
     
-    # FIXED: Direct calculation of seller earnings per order
     orders = execute_query("""
         SELECT o.orderID, o.orderDate, o.orderStatus, u.name as customer_name,
                SUM(oi.quantity * oi.priceOnSale) as amount
@@ -745,7 +732,6 @@ def seller_dashboard():
         ORDER BY o.orderDate DESC LIMIT 10
     """, (session['user_id'],), fetch=True)
     
-    # Get analytics data
     monthly_stats = get_seller_monthly_stats(session['user_id'])
     simple_analytics = get_seller_simple_analytics(session['user_id'])
     
@@ -860,7 +846,6 @@ def update_order_status():
 @app.route('/seller/order/<int:order_id>')
 @login_required('seller')
 def seller_order_detail(order_id):
-    # FIXED: Get order details - only check if seller has products in this order
     order = execute_query("""
         SELECT o.*, u.name as customer_name, u.email as customer_email, 
                u.phone as customer_phone, u.address, p.amount as total_order_amount, 
@@ -883,8 +868,6 @@ def seller_order_detail(order_id):
     if not order:
         flash('Order not found or access denied', 'error')
         return redirect(url_for('seller_orders'))
-    
-    # FIXED: Get ONLY order items that belong to this specific seller
     order_items = execute_query("""
         SELECT oi.*, p.productName, p.brand, p.productCategory,
                (oi.quantity * oi.priceOnSale) as total_price
@@ -898,7 +881,6 @@ def seller_order_detail(order_id):
 
 def get_seller_monthly_stats(seller_id):
     """Get current month statistics for seller - Fixed to work with actual data"""
-    # Use August 2025 as current month since that's where your main data is
     current_month_start = datetime(2025, 8, 1)
     next_month = datetime(2025, 9, 1)
     
@@ -930,8 +912,6 @@ def get_seller_monthly_stats(seller_id):
 
 def get_seller_simple_analytics(seller_id):
     """Get comprehensive analytics for seller popup - Fixed version"""
-    
-    # Get best selling month - Fixed query
     best_month = execute_query("""
         SELECT 
             MONTHNAME(o.orderDate) as month_name,
@@ -949,7 +929,6 @@ def get_seller_simple_analytics(seller_id):
         LIMIT 1
     """, (seller_id,), fetch=True)
     
-    # Get best selling product
     best_product = execute_query("""
         SELECT 
             p.productName,
@@ -967,8 +946,6 @@ def get_seller_simple_analytics(seller_id):
         ORDER BY total_sold DESC
         LIMIT 1
     """, (seller_id,), fetch=True)
-    
-    # Fixed monthly comparison - Use actual data months (July vs August 2025)
     monthly_comparison = execute_query("""
         SELECT 
             -- August 2025 data (current month in your data)
@@ -997,20 +974,17 @@ def get_seller_simple_analytics(seller_id):
         )
     """, (seller_id,), fetch=True)
     
-    # Process comparison data
     comparison_data = monthly_comparison[0] if monthly_comparison else {
         'current_revenue': 0, 'current_orders': 0, 'current_items': 0,
         'previous_revenue': 0, 'previous_orders': 0, 'previous_items': 0
     }
     
-    # Calculate averages safely
     current_avg = float(comparison_data['current_revenue']) / comparison_data['current_orders'] if comparison_data['current_orders'] > 0 else 0
     previous_avg = float(comparison_data['previous_revenue']) / comparison_data['previous_orders'] if comparison_data['previous_orders'] > 0 else 0
     
     comparison_data['current_avg'] = current_avg
     comparison_data['previous_avg'] = previous_avg
     
-    # Format best month properly
     if best_month:
         best_month[0]['month'] = f"{best_month[0]['month_name']} {best_month[0]['year']}"
     
@@ -1249,7 +1223,7 @@ def get_recommended_products(user_id, limit=4):
     if len(category_based) >= limit:
         return category_based[:limit]
     
-    # Strategy 2: Popular products (if not enough category-based recommendations)
+    # Strategy 2: Popular products
     popular_products = execute_query("""
         SELECT p.*, i.pricePerUnit, i.currentStock, i.inventoryID, u.name as seller_name,
                COUNT(ua.inventoryID) as activity_count
@@ -1267,10 +1241,8 @@ def get_recommended_products(user_id, limit=4):
         LIMIT %s
     """, (user_id, limit - len(category_based)), fetch=True)
     
-    # Combine both strategies
     all_recommendations = category_based + popular_products
     
-    # Remove duplicates while preserving order
     seen = set()
     unique_recommendations = []
     for product in all_recommendations:
