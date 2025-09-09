@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Orders - ShopEase{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">
+            <i class="fas fa-receipt me-2"></i>Order Management
+        </h2>
+        <a href="{{ url_for('seller_dashboard') }}" class="btn btn-outline-light">
+            <i class="fas fa-tachometer-alt me-2"></i>Back to Dashboard
+        </a>
+    </div>
+
+    {% if orders %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>All Orders ({{ orders|length }})
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>
+                                <a href="{{ url_for('seller_order_detail', order_id=order.orderID) }}" class="text-decoration-none">
+                                    <strong>#{{ order.orderID }}</strong>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="me-2">
+                                        <i class="fas fa-user-circle fa-lg text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <strong>{{ order.customer_name }}</strong>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <strong>{{ order.orderDate.strftime('%d %b %Y') }}</strong><br>
+                                    <small class="text-muted">{{ order.orderDate.strftime('%I:%M %p') }}</small>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="fw-bold text-success">৳{{ "%.2f"|format(order.amount) if order.amount else "0.00" }}</span>
+                            </td>
+                            <td>
+                                <form method="POST" action="{{ url_for('update_order_status') }}" class="d-inline">
+                                    <input type="hidden" name="order_id" value="{{ order.orderID }}">
+                                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" style="width: auto;">
+                                        <option value="pending" {{ 'selected' if order.orderStatus == 'pending' else '' }}>Pending</option>
+                                        <option value="confirmed" {{ 'selected' if order.orderStatus == 'confirmed' else '' }}>Confirmed</option>
+                                        <option value="processing" {{ 'selected' if order.orderStatus == 'processing' else '' }}>Processing</option>
+                                        <option value="shipped" {{ 'selected' if order.orderStatus == 'shipped' else '' }}>Shipped</option>
+                                        <option value="delivered" {{ 'selected' if order.orderStatus == 'delivered' else '' }}>Delivered</option>
+                                        <option value="cancelled" {{ 'selected' if order.orderStatus == 'cancelled' else '' }}>Cancelled</option>
+                                    </select>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Status Statistics -->
+    <div class="row mt-4">
+        <div class="col-md-2">
+            <div class="card text-center" style="background: linear-gradient(45deg, var(--warning-color), #fbbf24);">
+                <div class="card-body text-white p-3">
+                    <i class="fas fa-clock fa-2x mb-2"></i>
+                    <h4>{{ orders|selectattr('orderStatus', 'equalto', 'pending')|list|length }}</h4>
+                    <p class="mb-0 small">Pending</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center" style="background: linear-gradient(45deg, var(--accent-color), #0891b2);">
+                <div class="card-body text-white p-3">
+                    <i class="fas fa-check-circle fa-2x mb-2"></i>
+                    <h4>{{ orders|selectattr('orderStatus', 'equalto', 'confirmed')|list|length }}</h4>
+                    <p class="mb-0 small">Confirmed</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center" style="background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));">
+                <div class="card-body text-white p-3">
+                    <i class="fas fa-cogs fa-2x mb-2"></i>
+                    <h4>{{ orders|selectattr('orderStatus', 'equalto', 'processing')|list|length }}</h4>
+                    <p class="mb-0 small">Processing</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center" style="background: linear-gradient(45deg, var(--info-color), #3b82f6);">
+                <div class="card-body text-white p-3">
+                    <i class="fas fa-truck fa-2x mb-2"></i>
+                    <h4>{{ orders|selectattr('orderStatus', 'equalto', 'shipped')|list|length }}</h4>
+                    <p class="mb-0 small">Shipped</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center" style="background: linear-gradient(45deg, var(--success-color), #059669);">
+                <div class="card-body text-white p-3">
+                    <i class="fas fa-check fa-2x mb-2"></i>
+                    <h4>{{ orders|selectattr('orderStatus', 'equalto', 'delivered')|list|length }}</h4>
+                    <p class="mb-0 small">Delivered</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center" style="background: linear-gradient(45deg, var(--danger-color), #dc2626);">
+                <div class="card-body text-white p-3">
+                    <i class="fas fa-times fa-2x mb-2"></i>
+                    <h4>{{ orders|selectattr('orderStatus', 'equalto', 'cancelled')|list|length }}</h4>
+                    <p class="mb-0 small">Cancelled</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="text-center py-5">
+        <div class="card">
+            <div class="card-body p-5">
+                <i class="fas fa-receipt fa-4x text-muted mb-4"></i>
+                <h3 class="mb-3">No orders found</h3>
+                <p class="text-muted mb-4">Orders from customers will appear here when they purchase your products.</p>
+                <a href="{{ url_for('seller_dashboard') }}" class="btn btn-primary">
+                    <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Discount Management - ShopEase{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">
+            <i class="fas fa-percentage me-2"></i>Discount Management
+        </h2>
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-light">
+            <i class="fas fa-tachometer-alt me-2"></i>Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Add Discount Form -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-plus me-2"></i>Add New Discount
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('add_discount') }}">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="discount_code" class="form-label">Discount Code</label>
+                        <input type="text" class="form-control" id="discount_code" name="discount_code" required 
+                               placeholder="e.g., SAVE20" style="text-transform: uppercase;">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label for="discount_type" class="form-label">Type</label>
+                        <select class="form-select" id="discount_type" name="discount_type" required>
+                            <option value="percentage">Percentage</option>
+                            <option value="fixed">Fixed Amount</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label for="discount_value" class="form-label">Value</label>
+                        <input type="number" class="form-control" id="discount_value" name="discount_value" 
+                               step="0.01" min="0" required placeholder="10">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label for="start_date" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="start_date" name="start_date" required>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label for="end_date" class="form-label">End Date</label>
+                        <input type="date" class="form-control" id="end_date" name="end_date" required>
+                    </div>
+                    <div class="col-md-1 mb-3">
+                        <label for="use_limit" class="form-label">Limit</label>
+                        <input type="number" class="form-control" id="use_limit" name="use_limit" 
+                               min="1" required placeholder="100">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-plus me-2"></i>Add Discount
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Discounts List -->
+    {% if discounts %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>All Discounts ({{ discounts|length }})
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Code</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                            <th>Valid Period</th>
+                            <th>Usage Limit</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for discount in discounts %}
+                        <tr>
+                            <td>
+                                <span class="badge bg-primary fs-6">{{ discount.discountCode }}</span>
+                            </td>
+                            <td>
+                                {% if discount.discountType == 'percentage' %}
+                                    <span class="badge bg-info">
+                                        <i class="fas fa-percentage me-1"></i>Percentage
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-dollar-sign me-1"></i>Fixed Amount
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="fw-bold">
+                                {% if discount.discountType == 'percentage' %}
+                                    {{ discount.discountValue }}%
+                                {% else %}
+                                    ৳{{ "%.2f"|format(discount.discountValue) }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div>
+                                    <small class="text-muted">From:</small> {{ discount.startDate.strftime('%d %b %Y') }}<br>
+                                    <small class="text-muted">To:</small> {{ discount.endDate.strftime('%d %b %Y') }}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary">{{ discount.useLimit }}</span>
+                            </td>
+                            <td>
+                                {% if discount.endDate < today %}
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-times me-1"></i>Expired
+                                    </span>
+                                {% elif discount.startDate > today %}
+                                    <span class="badge bg-warning">
+                                        <i class="fas fa-clock me-1"></i>Scheduled
+                                    </span>
+                                {% elif discount.useLimit <= 0 %}
+                                    <span class="badge bg-secondary">
+                                        <i class="fas fa-ban me-1"></i>Used Up
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check me-1"></i>Active
+                                    </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <div class="card">
+            <div class="card-body p-5">
+                <i class="fas fa-percentage fa-4x text-muted mb-4"></i>
+                <h3 class="mb-3">No discounts created yet</h3>
+                <p class="text-muted">Create your first discount using the form above.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% block scripts %}
+<script>
+    // Set minimum date to today for new discounts
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('start_date').setAttribute('min', today);
+        document.getElementById('end_date').setAttribute('min', today);
+        
+        // Update end date minimum when start date changes
+        document.getElementById('start_date').addEventListener('change', function() {
+            document.getElementById('end_date').setAttribute('min', this.value);
+        });
+        
+        // Auto-uppercase discount code
+        document.getElementById('discount_code').addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}

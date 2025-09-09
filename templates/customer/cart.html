@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart - ShopEase{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">
+            <i class="fas fa-shopping-cart me-2"></i>Shopping Cart
+        </h2>
+        <a href="{{ url_for('customer_home') }}" class="btn btn-outline-light">
+            <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+        </a>
+    </div>
+
+    {% if cart_items %}
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Cart Items ({{ cart_items|length }})</h5>
+                </div>
+                <div class="card-body p-0">
+                    {% for item in cart_items %}
+                    <div class="d-flex align-items-center p-4 border-bottom">
+                        <div class="me-3">
+                            <div class="product-icon" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                                {% if 'electronic' in item.productName.lower() %}
+                                    <i class="fas fa-laptop"></i>
+                                {% elif 'clothing' in item.productName.lower() %}
+                                    <i class="fas fa-tshirt"></i>
+                                {% elif 'book' in item.productName.lower() %}
+                                    <i class="fas fa-book"></i>
+                                {% elif 'home' in item.productName.lower() %}
+                                    <i class="fas fa-home"></i>
+                                {% elif 'sport' in item.productName.lower() %}
+                                    <i class="fas fa-dumbbell"></i>
+                                {% elif 'beauty' in item.productName.lower() %}
+                                    <i class="fas fa-spa"></i>
+                                {% else %}
+                                    <i class="fas fa-box"></i>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">{{ item.productName }}</h6>
+                            <p class="text-muted mb-2">৳{{ "%.2f"|format(item.pricePerUnit) }} each</p>
+                            <small class="text-muted">Stock available: {{ item.currentStock }}</small>
+                        </div>
+                        
+                        <div class="d-flex align-items-center">
+                            <form method="POST" action="{{ url_for('update_cart') }}" class="d-flex align-items-center me-3">
+                                <input type="hidden" name="inventory_id" value="{{ item.inventoryID }}">
+                                <label class="me-2">Qty:</label>
+                                <input type="number" name="quantity" class="form-control" 
+                                       value="{{ item.quantity }}" min="0" max="{{ item.currentStock }}" 
+                                       style="width: 80px;" onchange="this.form.submit()">
+                            </form>
+                            
+                            <div class="text-end">
+                                <div class="fw-bold text-primary">৳{{ "%.2f"|format(item.total_price) }}</div>
+                                <form method="POST" action="{{ url_for('update_cart') }}" class="d-inline">
+                                    <input type="hidden" name="inventory_id" value="{{ item.inventoryID }}">
+                                    <input type="hidden" name="quantity" value="0">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calculator me-2"></i>Order Summary
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>৳{{ "%.2f"|format(subtotal) }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Delivery:</span>
+                        <span class="text-primary">৳{{ "%.2f"|format(delivery_charge) }}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="fw-bold">Total:</span>
+                        <span class="fw-bold text-primary fs-5">৳{{ "%.2f"|format(total_amount) }}</span>
+                    </div>
+                    
+                    <div class="alert alert-info mb-3">
+                        <i class="fas fa-coins me-2"></i>
+                        You'll earn <strong>{{ (subtotal * 0.01)|int }}</strong> loyalty points
+                        <br><small class="text-muted">Points based on subtotal only</small>
+                    </div>
+
+                    <div class="d-grid">
+                        <a href="{{ url_for('checkout') }}" class="btn btn-success btn-lg">
+                            <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body text-center">
+                    <i class="fas fa-shield-alt text-success fa-2x mb-2"></i>
+                    <h6>Secure Shopping</h6>
+                    <small class="text-muted">Your payment information is safe with us</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="text-center py-5">
+        <div class="card">
+            <div class="card-body p-5">
+                <i class="fas fa-shopping-cart fa-4x text-muted mb-4"></i>
+                <h3 class="mb-3">Your cart is empty</h3>
+                <p class="text-muted mb-4">Looks like you haven't added any items to your cart yet.</p>
+                <a href="{{ url_for('customer_home') }}" class="btn btn-primary">
+                    <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.productName }} - ShopEase{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="row">
+        <!-- Product Information -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center p-5">
+                    <div class="product-icon mb-4" style="width: 200px; height: 200px; font-size: 4rem;">
+                        {% if 'electronic' in product.productCategory.lower() %}
+                            <i class="fas fa-laptop"></i>
+                        {% elif 'clothing' in product.productCategory.lower() %}
+                            <i class="fas fa-tshirt"></i>
+                        {% elif 'book' in product.productCategory.lower() %}
+                            <i class="fas fa-book"></i>
+                        {% elif 'home' in product.productCategory.lower() %}
+                            <i class="fas fa-home"></i>
+                        {% elif 'sport' in product.productCategory.lower() %}
+                            <i class="fas fa-dumbbell"></i>
+                        {% elif 'beauty' in product.productCategory.lower() %}
+                            <i class="fas fa-spa"></i>
+                        {% else %}
+                            <i class="fas fa-box"></i>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body p-4">
+                    <nav aria-label="breadcrumb" class="mb-3">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('customer_home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url_for('search', category=product.productCategory) }}">{{ product.productCategory }}</a></li>
+                            <li class="breadcrumb-item active">{{ product.productName }}</li>
+                        </ol>
+                    </nav>
+
+                    <h2 class="fw-bold mb-3">{{ product.productName }}</h2>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <p class="mb-1"><strong>Brand:</strong></p>
+                            <span class="badge bg-secondary">{{ product.brand }}</span>
+                        </div>
+                        <div class="col-6">
+                            <p class="mb-1"><strong>Category:</strong></p>
+                            <span class="badge bg-info">{{ product.productCategory }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <h4 class="text-primary fw-bold">৳{{ "%.2f"|format(product.pricePerUnit) }}</h4>
+                        </div>
+                        <div class="col-6">
+                            {% if product.currentStock > 0 %}
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check me-1"></i>In Stock ({{ product.currentStock }})
+                                </span>
+                            {% else %}
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-times me-1"></i>Out of Stock
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <p class="text-muted mb-4">
+                        <i class="fas fa-store me-2"></i>Sold by: <strong>{{ product.seller_name }}</strong>
+                    </p>
+
+                    {% if product.currentStock > 0 %}
+                    <div class="row g-2 mb-4">
+                        <div class="col-6">
+                            <form method="POST" action="{{ url_for('add_to_cart') }}">
+                                <input type="hidden" name="inventory_id" value="{{ product.inventoryID }}">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">Qty</span>
+                                    <input type="number" name="quantity" class="form-control" value="1" min="1" max="{{ product.currentStock }}">
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-6">
+                            {% if in_wishlist %}
+                            <form method="POST" action="{{ url_for('remove_from_wishlist') }}">
+                                <input type="hidden" name="product_id" value="{{ product.productID }}">
+                                <button type="submit" class="btn btn-outline-secondary w-100" style="margin-top: 42px;"
+                                        onclick="return confirm('Remove this item from your wishlist?')">
+                                    <i class="fas fa-heart-broken me-2"></i>Remove from Wishlist
+                                </button>
+                            </form>
+                            {% else %}
+                            <form method="POST" action="{{ url_for('add_to_wishlist') }}">
+                                <input type="hidden" name="product_id" value="{{ product.productID }}">
+                                <button type="submit" class="btn btn-outline-danger w-100" style="margin-top: 42px;">
+                                    <i class="fas fa-heart me-2"></i>Add to Wishlist
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% else %}
+                    <!-- Show wishlist button even when out of stock -->
+                    <div class="row g-2 mb-4">
+                        <div class="col-12">
+                            {% if in_wishlist %}
+                            <form method="POST" action="{{ url_for('remove_from_wishlist') }}">
+                                <input type="hidden" name="product_id" value="{{ product.productID }}">
+                                <button type="submit" class="btn btn-outline-secondary w-100"
+                                        onclick="return confirm('Remove this item from your wishlist?')">
+                                    <i class="fas fa-heart-broken me-2"></i>Remove from Wishlist
+                                </button>
+                            </form>
+                            {% else %}
+                            <form method="POST" action="{{ url_for('add_to_wishlist') }}">
+                                <input type="hidden" name="product_id" value="{{ product.productID }}">
+                                <button type="submit" class="btn btn-outline-danger w-100">
+                                    <i class="fas fa-heart me-2"></i>Add to Wishlist
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-truck me-2"></i>
+                        <strong>Cash on Delivery Available</strong><br>
+                        Pay when you receive your order
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-star me-2"></i>Customer Reviews
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Add Review Form -->
+                    <form method="POST" action="{{ url_for('add_review') }}" class="mb-4">
+                        <input type="hidden" name="product_id" value="{{ product.productID }}">
+                        <h6 class="mb-3">Write a Review</h6>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="rating" class="form-label">Rating</label>
+                                <select class="form-select" name="rating" required>
+                                    <option value="">Select Rating</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                    <option value="4">⭐⭐⭐⭐ Good</option>
+                                    <option value="3">⭐⭐⭐ Average</option>
+                                    <option value="2">⭐⭐ Poor</option>
+                                    <option value="1">⭐ Very Poor</option>
+                                </select>
+                            </div>
+                            <div class="col-md-9 mb-3">
+                                <label for="review" class="form-label">Review</label>
+                                <textarea class="form-control" name="review" rows="3" placeholder="Share your experience with this product..." required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane me-2"></i>Submit Review
+                        </button>
+                    </form>
+
+                    <hr>
+
+                    <!-- Display Reviews -->
+                    {% if reviews %}
+                        {% for review in reviews %}
+                        <div class="border-bottom pb-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-1">{{ review.customer_name }}</h6>
+                                    <div class="mb-2">
+                                        {% for i in range(review.rating) %}
+                                            <i class="fas fa-star text-warning"></i>
+                                        {% endfor %}
+                                        {% for i in range(5 - review.rating) %}
+                                            <i class="far fa-star text-muted"></i>
+                                        {% endfor %}
+                                    </div>
+                                    <p class="mb-0">{{ review.review }}</p>
+                                </div>
+                                <small class="text-muted">{{ review.feedbackDate.strftime('%d %b %Y') }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-comment-slash fa-2x mb-3"></i>
+                            <p>No reviews yet. Be the first to review this product!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

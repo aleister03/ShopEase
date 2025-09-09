@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}All Orders - ShopEase{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">
+            <i class="fas fa-receipt me-2"></i>All Orders
+        </h2>
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-light">
+            <i class="fas fa-tachometer-alt me-2"></i>Back to Dashboard
+        </a>
+    </div>
+
+    {% if orders %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>Order History ({{ orders|length }})
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Payment Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>
+                                <strong>#{{ order.orderID }}</strong>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="me-2">
+                                        <i class="fas fa-user-circle fa-lg text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <strong>{{ order.customer_name }}</strong>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <strong>{{ order.orderDate.strftime('%d %b %Y') }}</strong><br>
+                                    <small class="text-muted">{{ order.orderDate.strftime('%I:%M %p') }}</small>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="fw-bold text-success">৳{{ "%.2f"|format(order.amount) if order.amount else "0.00" }}</span>
+                            </td>
+                            <td>
+                                {% if order.orderStatus == 'pending' %}
+                                    <span class="badge bg-warning">
+                                        <i class="fas fa-clock me-1"></i>Pending
+                                    </span>
+                                {% elif order.orderStatus == 'packed' %}
+                                    <span class="badge bg-info">
+                                        <i class="fas fa-box me-1"></i>Packed
+                                    </span>
+                                {% elif order.orderStatus == 'shipped' %}
+                                    <span class="badge bg-primary">
+                                        <i class="fas fa-truck me-1"></i>Shipped
+                                    </span>
+                                {% elif order.orderStatus == 'delivered' %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check me-1"></i>Delivered
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ order.orderStatus|title }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form method="POST" action="{{ url_for('update_payment_status') }}" class="d-inline">
+                                    <input type="hidden" name="order_id" value="{{ order.orderID }}">
+                                    <select name="payment_status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        <option value="pending" {{ 'selected' if order.paymentStatus == 'pending' else '' }}>Pending</option>
+                                        <option value="completed" {{ 'selected' if order.paymentStatus == 'completed' else '' }}>Completed</option>
+                                        <option value="failed" {{ 'selected' if order.paymentStatus == 'failed' else '' }}>Failed</option>
+                                    </select>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <div class="card">
+            <div class="card-body p-5">
+                <i class="fas fa-receipt fa-4x text-muted mb-4"></i>
+                <h3 class="mb-3">No orders found</h3>
+                <p class="text-muted">Orders will appear here once customers start placing orders.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

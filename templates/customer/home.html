@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}Home - ShopEase{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <!-- Categories Navigation Bar -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark">
+                <div class="card-body py-2">
+                    <div class="d-flex flex-wrap justify-content-center align-items-center gap-3">
+                        <a href="{{ url_for('search') }}" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-th-large me-1"></i>All Categories
+                        </a>
+                        {% for category in categories %}
+                        <a href="{{ url_for('search', category=category.productCategory) }}" class="btn btn-outline-light btn-sm">
+                            {% if 'electronic' in category.productCategory.lower() %}
+                                <i class="fas fa-laptop me-1"></i>
+                            {% elif 'clothing' in category.productCategory.lower() or 'fashion' in category.productCategory.lower() %}
+                                <i class="fas fa-tshirt me-1"></i>
+                            {% elif 'book' in category.productCategory.lower() %}
+                                <i class="fas fa-book me-1"></i>
+                            {% elif 'home' in category.productCategory.lower() %}
+                                <i class="fas fa-home me-1"></i>
+                            {% elif 'sport' in category.productCategory.lower() %}
+                                <i class="fas fa-dumbbell me-1"></i>
+                            {% elif 'beauty' in category.productCategory.lower() %}
+                                <i class="fas fa-spa me-1"></i>
+                            {% else %}
+                                <i class="fas fa-box me-1"></i>
+                            {% endif %}
+                            {{ category.productCategory }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Discounts -->
+    {% if discounts %}
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="mb-4 text-white">
+                <i class="fas fa-percentage me-2"></i>Active Discounts
+            </h3>
+            <div class="row">
+                {% for discount in discounts %}
+                <div class="col-md-6 col-lg-4 mb-3">
+                    <div class="card text-center" style="background: linear-gradient(45deg, var(--warning-color), #fbbf24);">
+                        <div class="card-body text-white">
+                            <h5 class="card-title">
+                                <i class="fas fa-tag me-2"></i>{{ discount.discountCode }}
+                            </h5>
+                            <p class="card-text">
+                                {{ discount.discountValue }}{{ '%' if discount.discountType == 'percentage' else ' BDT' }} OFF
+                            </p>
+                            <small>Valid until {{ discount.endDate.strftime('%d %b %Y') }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Featured Products Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="mb-4 text-white">
+                <i class="fas fa-star me-2"></i>Featured Products
+            </h3>
+            <div class="row">
+                {% for product in top_products[:4] %}
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="product-icon mb-3">
+                                {% if 'electronic' in product.productCategory.lower() %}
+                                    <i class="fas fa-laptop"></i>
+                                {% elif 'clothing' in product.productCategory.lower() %}
+                                    <i class="fas fa-tshirt"></i>
+                                {% elif 'book' in product.productCategory.lower() %}
+                                    <i class="fas fa-book"></i>
+                                {% elif 'home' in product.productCategory.lower() %}
+                                    <i class="fas fa-home"></i>
+                                {% elif 'sport' in product.productCategory.lower() %}
+                                    <i class="fas fa-dumbbell"></i>
+                                {% elif 'beauty' in product.productCategory.lower() %}
+                                    <i class="fas fa-spa"></i>
+                                {% else %}
+                                    <i class="fas fa-box"></i>
+                                {% endif %}
+                            </div>
+                            <h6 class="card-title fw-bold">{{ product.productName }}</h6>
+                            <p class="text-muted small mb-2">{{ product.brand }}</p>
+                            <p class="text-primary fw-bold mb-2">৳{{ "%.2f"|format(product.pricePerUnit) }}</p>
+                            <p class="small text-muted mb-3">
+                                <i class="fas fa-store me-1"></i>by {{ product.seller_name }}
+                            </p>
+                            <div class="d-grid gap-2">
+                                <a href="{{ url_for('product_detail', product_id=product.productID) }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>View Details
+                                </a>
+                                {% if product.currentStock > 0 %}
+                                <form method="POST" action="{{ url_for('add_to_cart') }}" class="d-inline">
+                                    <input type="hidden" name="inventory_id" value="{{ product.inventoryID }}">
+                                    <button type="submit" class="btn btn-success btn-sm w-100">
+                                        <i class="fas fa-cart-plus me-1"></i>Add to Cart
+                                    </button>
+                                </form>
+                                {% else %}
+                                <button class="btn btn-secondary btn-sm w-100" disabled>
+                                    <i class="fas fa-times me-1"></i>Out of Stock
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent text-center">
+                            <small class="text-muted">
+                                <i class="fas fa-boxes me-1"></i>Stock: {{ product.currentStock }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommended for You Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="mb-4 text-white">
+                <i class="fas fa-thumbs-up me-2"></i>Recommended for You
+            </h3>
+            <div class="row">
+                {% if recommended_products %}
+                    {% for product in recommended_products %}
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="card h-100" style="border: 2px solid var(--accent-color);">
+                            <div class="card-body text-center">
+                                <div class="position-relative">
+                                    <div class="product-icon mb-3">
+                                        {% if 'electronic' in product.productCategory.lower() %}
+                                            <i class="fas fa-laptop"></i>
+                                        {% elif 'clothing' in product.productCategory.lower() %}
+                                            <i class="fas fa-tshirt"></i>
+                                        {% elif 'book' in product.productCategory.lower() %}
+                                            <i class="fas fa-book"></i>
+                                        {% elif 'home' in product.productCategory.lower() %}
+                                            <i class="fas fa-home"></i>
+                                        {% elif 'sport' in product.productCategory.lower() %}
+                                            <i class="fas fa-dumbbell"></i>
+                                        {% elif 'beauty' in product.productCategory.lower() %}
+                                            <i class="fas fa-spa"></i>
+                                        {% else %}
+                                            <i class="fas fa-box"></i>
+                                        {% endif %}
+                                    </div>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill" style="background: var(--accent-color);">
+                                        <i class="fas fa-star"></i>
+                                    </span>
+                                </div>
+                                <h6 class="card-title fw-bold">{{ product.productName }}</h6>
+                                <p class="text-muted small mb-2">{{ product.brand }}</p>
+                                <p class="text-primary fw-bold mb-2">৳{{ "%.2f"|format(product.pricePerUnit) }}</p>
+                                <p class="small text-muted mb-3">
+                                    <i class="fas fa-store me-1"></i>by {{ product.seller_name }}
+                                </p>
+                                <div class="d-grid gap-2">
+                                    <a href="{{ url_for('product_detail', product_id=product.productID) }}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i>View Details
+                                    </a>
+                                    {% if product.currentStock > 0 %}
+                                    <form method="POST" action="{{ url_for('add_to_cart') }}" class="d-inline">
+                                        <input type="hidden" name="inventory_id" value="{{ product.inventoryID }}">
+                                        <button type="submit" class="btn btn-success btn-sm w-100">
+                                            <i class="fas fa-cart-plus me-1"></i>Add to Cart
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <button class="btn btn-secondary btn-sm w-100" disabled>
+                                        <i class="fas fa-times me-1"></i>Out of Stock
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent text-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-boxes me-1"></i>Stock: {{ product.currentStock }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body text-center py-4">
+                                <i class="fas fa-magic fa-3x text-muted mb-3"></i>
+                                <h5>Building Your Recommendations</h5>
+                                <p class="text-muted">Browse and purchase products to get personalized recommendations!</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

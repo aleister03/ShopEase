@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - ShopEase{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">
+            <i class="fas fa-crown me-2"></i>Admin Dashboard
+        </h2>
+        <div>
+            <span class="text-light me-3">Welcome, {{ session.name }}!</span>
+        </div>
+    </div>
+
+    <!-- Admin Navigation Bar -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body py-2">
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="{{ url_for('admin_users') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-users me-2"></i>Manage Users
+                        </a>
+                        <a href="{{ url_for('admin_orders') }}" class="btn btn-outline-success">
+                            <i class="fas fa-receipt me-2"></i>View All Orders
+                        </a>
+                        <a href="{{ url_for('admin_discounts') }}" class="btn btn-outline-warning">
+                            <i class="fas fa-percentage me-2"></i>Manage Discounts
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Overview -->
+    <div class="row mb-5">
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>{{ stats.total_users }}</h3>
+                <p class="mb-0">Total Users</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-icon" style="background: linear-gradient(45deg, var(--success-color), var(--accent-color));">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <h3>{{ stats.total_orders }}</h3>
+                <p class="mb-0">Total Orders</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-icon" style="background: linear-gradient(45deg, var(--warning-color), #fbbf24);">
+                    <i class="fas fa-box"></i>
+                </div>
+                <h3>{{ stats.total_products }}</h3>
+                <p class="mb-0">Total Products</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-icon" style="background: linear-gradient(45deg, var(--danger-color), #f87171);">
+                    <i class="fas fa-percentage"></i>
+                </div>
+                <h3>{{ stats.active_discounts }}</h3>
+                <p class="mb-0">Active Discounts</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Information -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>System Overview
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6 mb-3">
+                            <div class="border-end">
+                                <h4 class="text-primary mb-1">ShopEase</h4>
+                                <small class="text-muted">E-Commerce Platform</small>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <h4 class="text-success mb-1">v1.0.0</h4>
+                            <small class="text-muted">Current Version</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-server me-2"></i>Server Status</span>
+                        <span class="badge bg-success">
+                            <i class="fas fa-check me-1"></i>Online
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>Security & Access
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        All systems are secure and operating normally
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-lock me-2 text-success"></i>
+                            Password encryption enabled
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-user-shield me-2 text-success"></i>
+                            Role-based access control active
+                        </li>
+                        <li class="mb-0">
+                            <i class="fas fa-database me-2 text-success"></i>
+                            Database connections secured
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

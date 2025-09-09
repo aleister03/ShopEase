@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Add Product - ShopEase{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">
+            <i class="fas fa-plus me-2"></i>Add New Product
+        </h2>
+        <a href="{{ url_for('seller_dashboard') }}" class="btn btn-outline-light">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-box me-2"></i>Product Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="product_name" class="form-label">
+                                    <i class="fas fa-tag me-2"></i>Product Name
+                                </label>
+                                <input type="text" class="form-control" id="product_name" name="product_name" required placeholder="Enter product name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="brand" class="form-label">
+                                    <i class="fas fa-certificate me-2"></i>Brand
+                                </label>
+                                <input type="text" class="form-control" id="brand" name="brand" required placeholder="Enter brand name">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="category" class="form-label">
+                                    <i class="fas fa-th-large me-2"></i>Category
+                                </label>
+                                <select class="form-select" id="category" name="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Clothing & Fashion">Clothing & Fashion</option>
+                                    <option value="Books & Media">Books & Media</option>
+                                    <option value="Home & Garden">Home & Garden</option>
+                                    <option value="Sports & Outdoors">Sports & Outdoors</option>
+                                    <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+                                    <option value="Health & Wellness">Health & Wellness</option>
+                                    <option value="Toys & Games">Toys & Games</option>
+                                    <option value="Food & Beverages">Food & Beverages</option>
+                                    <option value="Automotive">Automotive</option>
+                                    <option value="Office Supplies">Office Supplies</option>
+                                    <option value="Pet Supplies">Pet Supplies</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="price" class="form-label">
+                                    <i class="fas fa-dollar-sign me-2"></i>Price per Unit (৳)
+                                </label>
+                                <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" required placeholder="0.00">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="stock" class="form-label">
+                                    <i class="fas fa-boxes me-2"></i>Initial Stock Quantity
+                                </label>
+                                <input type="number" class="form-control" id="stock" name="stock" min="0" required placeholder="Enter stock quantity">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="reorder_level" class="form-label">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>Reorder Level
+                                </label>
+                                <input type="number" class="form-control" id="reorder_level" name="reorder_level" min="0" required placeholder="Minimum stock before reorder">
+                                <small class="text-muted">You'll be alerted when stock reaches this level</small>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Note:</strong> Make sure all product information is accurate. You can edit these details later from your dashboard.
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-plus me-2"></i>Add Product to Inventory
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

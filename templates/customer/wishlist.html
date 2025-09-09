@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}My Wishlist - ShopEase{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">
+            <i class="fas fa-heart me-2"></i>My Wishlist
+        </h2>
+        <a href="{{ url_for('customer_home') }}" class="btn btn-outline-light">
+            <i class="fas fa-home me-2"></i>Back to Home
+        </a>
+    </div>
+
+    {% if wishlist_items %}
+    <div class="row">
+        {% for item in wishlist_items %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="product-icon mb-3">
+                        {% if 'electronic' in item.productCategory.lower() %}
+                            <i class="fas fa-laptop"></i>
+                        {% elif 'clothing' in item.productCategory.lower() %}
+                            <i class="fas fa-tshirt"></i>
+                        {% elif 'book' in item.productCategory.lower() %}
+                            <i class="fas fa-book"></i>
+                        {% elif 'home' in item.productCategory.lower() %}
+                            <i class="fas fa-home"></i>
+                        {% elif 'sport' in item.productCategory.lower() %}
+                            <i class="fas fa-dumbbell"></i>
+                        {% elif 'beauty' in item.productCategory.lower() %}
+                            <i class="fas fa-spa"></i>
+                        {% else %}
+                            <i class="fas fa-box"></i>
+                        {% endif %}
+                    </div>
+                    
+                    <h6 class="card-title fw-bold">{{ item.productName }}</h6>
+                    <p class="text-muted small mb-2">{{ item.productCategory }}</p>
+                    <p class="text-primary fw-bold mb-3">৳{{ "%.2f"|format(item.pricePerUnit) }}</p>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('product_detail', product_id=item.productID) }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-eye me-1"></i>View Details
+                        </a>
+                        
+                        {% if item.currentStock > 0 %}
+                        <!-- Fixed: Use move_to_cart route instead of add_to_cart -->
+                        <form method="POST" action="{{ url_for('move_to_cart') }}" class="d-inline">
+                            <input type="hidden" name="inventory_id" value="{{ item.inventoryID }}">
+                            <input type="hidden" name="product_id" value="{{ item.productID }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-success btn-sm w-100">
+                                <i class="fas fa-cart-plus me-1"></i>Move to Cart
+                            </button>
+                        </form>
+                        {% else %}
+                        <button class="btn btn-secondary btn-sm w-100" disabled>
+                            <i class="fas fa-times me-1"></i>Out of Stock
+                        </button>
+                        {% endif %}
+                        
+                        <!-- Remove from Wishlist Button -->
+                        <form method="POST" action="{{ url_for('remove_from_wishlist') }}" class="d-inline">
+                            <input type="hidden" name="product_id" value="{{ item.productID }}">
+                            <button type="submit" class="btn btn-outline-danger btn-sm w-100" 
+                                    onclick="return confirm('Remove this item from your wishlist?')">
+                                <i class="fas fa-trash me-1"></i>Remove
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            Added: {{ item['dateAdded'].strftime('%d %b %Y') if item['dateAdded'] else 'N/A' }}
+                        </small>
+                        <small class="text-muted">
+                            Stock: {{ item.currentStock }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <div class="card">
+            <div class="card-body p-5">
+                <i class="fas fa-heart fa-4x text-muted mb-4"></i>
+                <h3 class="mb-3">Your wishlist is empty</h3>
+                <p class="text-muted mb-4">Save items you love to your wishlist and shop them later!</p>
+                <a href="{{ url_for('customer_home') }}" class="btn btn-primary">
+                    <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

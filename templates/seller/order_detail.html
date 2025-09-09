@@ -1,0 +1,201 @@
+
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.orderID }} - ShopEase{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">
+            <i class="fas fa-receipt me-2"></i>Order #{{ order.orderID }}
+        </h2>
+        <div>
+            <a href="{{ url_for('seller_orders') }}" class="btn btn-outline-light me-2">
+                <i class="fas fa-list me-2"></i>All Orders
+            </a>
+            <a href="{{ url_for('seller_dashboard') }}" class="btn btn-outline-light">
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Order Information -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Order Information
+                    </h5>
+                    <span class="badge bg-primary">Order #{{ order.orderID }}</span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-user me-2"></i>Customer Details</h6>
+                            <p class="mb-1"><strong>Name:</strong> {{ order.customer_name }}</p>
+                            <p class="mb-1"><strong>Email:</strong> {{ order.customer_email }}</p>
+                            <p class="mb-3"><strong>Phone:</strong> {{ order.customer_phone }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-calendar me-2"></i>Order Details</h6>
+                            <p class="mb-1"><strong>Order Date:</strong> {{ order.orderDate.strftime('%d %B %Y, %I:%M %p') }}</p>
+                            <p class="mb-1"><strong>Payment Method:</strong> {{ order.paymentMethod or 'Cash on Delivery' }}</p>
+                            <p class="mb-3"><strong>Payment Status:</strong> 
+                                <span class="badge {{ 'bg-success' if order.paymentStatus == 'completed' else 'bg-warning' }}">
+                                    {{ order.paymentStatus|title or 'Pending' }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shopping-cart me-2"></i>Your Products in This Order
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Your Earnings</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order_items %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <div class="product-icon" style="width: 40px; height: 40px; font-size: 1rem;">
+                                                    {% if 'electronic' in item.productCategory.lower() %}
+                                                        <i class="fas fa-laptop"></i>
+                                                    {% elif 'clothing' in item.productCategory.lower() %}
+                                                        <i class="fas fa-tshirt"></i>
+                                                    {% elif 'book' in item.productCategory.lower() %}
+                                                        <i class="fas fa-book"></i>
+                                                    {% elif 'home' in item.productCategory.lower() %}
+                                                        <i class="fas fa-home"></i>
+                                                    {% elif 'sport' in item.productCategory.lower() %}
+                                                        <i class="fas fa-dumbbell"></i>
+                                                    {% elif 'beauty' in item.productCategory.lower() %}
+                                                        <i class="fas fa-spa"></i>
+                                                    {% else %}
+                                                        <i class="fas fa-box"></i>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-1">{{ item.productName }}</h6>
+                                                <small class="text-muted">{{ item.brand }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="fw-bold">৳{{ "%.2f"|format(item.priceOnSale) }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary">{{ item.quantity }}</span>
+                                    </td>
+                                    <td class="fw-bold text-success">৳{{ "%.2f"|format(item.total_price) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot class="table-light">
+                                <tr>
+                                    <th colspan="3" class="text-end">Your Total Earnings:</th>
+                                    <th class="text-success">৳{{ "%.2f"|format(order.seller_earnings if order.seller_earnings else (order.amount - 60 if order.amount and order.amount >= 60 else 0)) }}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Note:</strong> The customer paid ৳60.00 delivery charge in addition to your product prices. This order shows only your products and earnings.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Status & Actions -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cog me-2"></i>Order Status
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <div class="status-indicator mb-3">
+                            {% if order.orderStatus == 'pending' %}
+                                <i class="fas fa-clock fa-3x text-warning"></i>
+                            {% elif order.orderStatus == 'confirmed' %}
+                                <i class="fas fa-check-circle fa-3x text-info"></i>
+                            {% elif order.orderStatus == 'processing' %}
+                                <i class="fas fa-cogs fa-3x text-primary"></i>
+                            {% elif order.orderStatus == 'shipped' %}
+                                <i class="fas fa-truck fa-3x text-primary"></i>
+                            {% elif order.orderStatus == 'delivered' %}
+                                <i class="fas fa-check fa-3x text-success"></i>
+                            {% elif order.orderStatus == 'cancelled' %}
+                                <i class="fas fa-times fa-3x text-danger"></i>
+                            {% endif %}
+                        </div>
+                        <h5>{{ order.orderStatus|title }}</h5>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('update_order_status') }}">
+                        <input type="hidden" name="order_id" value="{{ order.orderID }}">
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Update Status:</label>
+                            <select name="status" id="status" class="form-select">
+                                <option value="pending" {{ 'selected' if order.orderStatus == 'pending' else '' }}>Pending</option>
+                                <option value="confirmed" {{ 'selected' if order.orderStatus == 'confirmed' else '' }}>Confirmed</option>
+                                <option value="processing" {{ 'selected' if order.orderStatus == 'processing' else '' }}>Processing</option>
+                                <option value="shipped" {{ 'selected' if order.orderStatus == 'shipped' else '' }}>Shipped</option>
+                                <option value="delivered" {{ 'selected' if order.orderStatus == 'delivered' else '' }}>Delivered</option>
+                                <option value="cancelled" {{ 'selected' if order.orderStatus == 'cancelled' else '' }}>Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Update Status
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Customer Payment Summary -->
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Product Total:</span>
+                    <span>৳{{ "%.2f"|format(order.seller_earnings or 0) }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Delivery Charge:</span>
+                    <span class="text-primary">৳60.00</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-3">
+                    <strong>Customer Paid:</strong>
+                    <strong class="text-primary">৳{{ "%.2f"|format(order.total_order_amount or ((order.seller_earnings or 0) + 60)) }}</strong>
+                </div>
+                
+                <div class="alert alert-success">
+                    <i class="fas fa-money-bill-wave me-2"></i>
+                    <strong>Your Earnings:</strong> ৳{{ "%.2f"|format(order.seller_earnings or 0) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

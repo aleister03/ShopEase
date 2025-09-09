@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}User Management - ShopEase{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">
+            <i class="fas fa-users me-2"></i>User Management
+        </h2>
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-light">
+            <i class="fas fa-tachometer-alt me-2"></i>Back to Dashboard
+        </a>
+    </div>
+
+    {% if users %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>All Users ({{ users|length }})
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>User ID</th>
+                            <th>User Details</th>
+                            <th>Role</th>
+                            <th>Join Date</th>
+                            <th>Loyalty Points</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>
+                                <strong>#{{ user.userID }}</strong>
+                            </td>
+                            <td>
+                                <div>
+                                    <h6 class="mb-1">{{ user.name }}</h6>
+                                    <p class="mb-1 text-muted">
+                                        <i class="fas fa-envelope me-1"></i>{{ user.email }}
+                                    </p>
+                                    {% if user.phone %}
+                                    <small class="text-muted">
+                                        <i class="fas fa-phone me-1"></i>{{ user.phone }}
+                                    </small>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                {% if user.role == 'customer' %}
+                                    <span class="badge bg-primary">
+                                        <i class="fas fa-user me-1"></i>Customer
+                                    </span>
+                                {% elif user.role == 'seller' %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-store me-1"></i>Seller
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ user.role|title }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div>
+                                    <strong>{{ user.joinDate.strftime('%d %b %Y') }}</strong><br>
+                                    <small class="text-muted">{{ user.joinDate.strftime('%I:%M %p') }}</small>
+                                </div>
+                            </td>
+                            <td>
+                                {% if user.role == 'customer' %}
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="fas fa-coins me-1"></i>{{ user.loyaltyPoints }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-muted">N/A</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.status == 'active' %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check me-1"></i>Active
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-ban me-1"></i>Banned
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    {% if user.status == 'active' %}
+                                    <form method="POST" action="{{ url_for('toggle_user_status') }}" class="d-inline">
+                                        <input type="hidden" name="user_id" value="{{ user.userID }}">
+                                        <input type="hidden" name="action" value="ban">
+                                        <button type="submit" class="btn btn-sm btn-danger" 
+                                                onclick="return confirm('Are you sure you want to ban this user?')"
+                                                title="Ban User">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <form method="POST" action="{{ url_for('toggle_user_status') }}" class="d-inline">
+                                        <input type="hidden" name="user_id" value="{{ user.userID }}">
+                                        <input type="hidden" name="action" value="unban">
+                                        <button type="submit" class="btn btn-sm btn-success" 
+                                                onclick="return confirm('Are you sure you want to unban this user?')"
+                                                title="Unban User">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Statistics -->
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-center" style="background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));">
+                <div class="card-body text-white">
+                    <i class="fas fa-users fa-2x mb-2"></i>
+                    <h4>{{ users|selectattr('role', 'equalto', 'customer')|list|length }}</h4>
+                    <p class="mb-0">Customers</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center" style="background: linear-gradient(45deg, var(--success-color), var(--accent-color));">
+                <div class="card-body text-white">
+                    <i class="fas fa-store fa-2x mb-2"></i>
+                    <h4>{{ users|selectattr('role', 'equalto', 'seller')|list|length }}</h4>
+                    <p class="mb-0">Sellers</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center" style="background: linear-gradient(45deg, var(--danger-color), #f87171);">
+                <div class="card-body text-white">
+                    <i class="fas fa-ban fa-2x mb-2"></i>
+                    <h4>{{ users|selectattr('status', 'equalto', 'banned')|list|length }}</h4>
+                    <p class="mb-0">Banned Users</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="text-center py-5">
+        <div class="card">
+            <div class="card-body p-5">
+                <i class="fas fa-users fa-4x text-muted mb-4"></i>
+                <h3 class="mb-3">No users found</h3>
+                <p class="text-muted">Users will appear here once they register on the platform.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

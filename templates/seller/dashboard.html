@@ -1,0 +1,410 @@
+{% extends "base.html" %}
+
+{% block title %}Seller Dashboard - ShopEase{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">
+            <i class="fas fa-tachometer-alt me-2"></i>Seller Dashboard
+        </h2>
+        <div>
+            <span class="text-light me-3">Welcome, {{ session.name }}!</span>
+            <a href="{{ url_for('add_product') }}" class="btn btn-success">
+                <i class="fas fa-plus me-2"></i>Add Product
+            </a>
+        </div>
+    </div>
+
+    <!-- Monthly Analytics Comparison -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>Monthly Sales Analytics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Current Month vs Previous Month Comparison -->
+                        <div class="col-md-6">
+                            <h6 class="mb-4 text-center">This Month vs Previous Month</h6>
+                            
+                            <!-- Revenue Comparison -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span><i class="fas fa-dollar-sign me-2"></i>Revenue:</span>
+                                        <div class="text-end">
+                                            <div class="text-success fw-bold">৳{{ "%.2f"|format(simple_analytics.monthly_comparison.current_revenue or 0) }}</div>
+                                            <small class="text-muted">vs ৳{{ "%.2f"|format(simple_analytics.monthly_comparison.previous_revenue or 0) }}</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Revenue Change -->
+                                    <div class="text-end">
+                                        {% set current_rev = simple_analytics.monthly_comparison.current_revenue or 0 %}
+                                        {% set previous_rev = simple_analytics.monthly_comparison.previous_revenue or 0 %}
+                                        {% if previous_rev > 0 %}
+                                            {% set change = ((current_rev - previous_rev) / previous_rev * 100) %}
+                                            <span class="badge {{ 'bg-success' if change >= 0 else 'bg-danger' }}">
+                                                {{ "+" if change >= 0 else "" }}{{ "%.1f"|format(change) }}%
+                                            </span>
+                                        {% elif current_rev > 0 %}
+                                            <span class="badge bg-success">+100%</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">N/A</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Orders Comparison -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span><i class="fas fa-shopping-cart me-2"></i>Orders:</span>
+                                        <div class="text-end">
+                                            <div class="text-primary fw-bold">{{ simple_analytics.monthly_comparison.current_orders or 0 }}</div>
+                                            <small class="text-muted">vs {{ simple_analytics.monthly_comparison.previous_orders or 0 }}</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Orders Change -->
+                                    <div class="text-end">
+                                        {% set current_ord = simple_analytics.monthly_comparison.current_orders or 0 %}
+                                        {% set previous_ord = simple_analytics.monthly_comparison.previous_orders or 0 %}
+                                        {% if previous_ord > 0 %}
+                                            {% set change = ((current_ord - previous_ord) / previous_ord * 100) %}
+                                            <span class="badge {{ 'bg-success' if change >= 0 else 'bg-danger' }}">
+                                                {{ "+" if change >= 0 else "" }}{{ "%.1f"|format(change) }}%
+                                            </span>
+                                        {% elif current_ord > 0 %}
+                                            <span class="badge bg-success">+{{ current_ord }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">N/A</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Items Sold Comparison -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span><i class="fas fa-boxes me-2"></i>Items Sold:</span>
+                                        <div class="text-end">
+                                            <div class="text-warning fw-bold">{{ simple_analytics.monthly_comparison.current_items or 0 }}</div>
+                                            <small class="text-muted">vs {{ simple_analytics.monthly_comparison.previous_items or 0 }}</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Items Change -->
+                                    <div class="text-end">
+                                        {% set current_items = simple_analytics.monthly_comparison.current_items or 0 %}
+                                        {% set previous_items = simple_analytics.monthly_comparison.previous_items or 0 %}
+                                        {% if previous_items > 0 %}
+                                            {% set change = ((current_items - previous_items) / previous_items * 100) %}
+                                            <span class="badge {{ 'bg-success' if change >= 0 else 'bg-danger' }}">
+                                                {{ "+" if change >= 0 else "" }}{{ "%.1f"|format(change) }}%
+                                            </span>
+                                        {% elif current_items > 0 %}
+                                            <span class="badge bg-success">+{{ current_items }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">N/A</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Average Order Value Comparison -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span><i class="fas fa-chart-bar me-2"></i>Avg Order Value:</span>
+                                        <div class="text-end">
+                                            <div class="text-info fw-bold">৳{{ "%.2f"|format(simple_analytics.monthly_comparison.current_avg or 0) }}</div>
+                                            <small class="text-muted">vs ৳{{ "%.2f"|format(simple_analytics.monthly_comparison.previous_avg or 0) }}</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Average Change -->
+                                    <div class="text-end">
+                                        {% set current_avg = simple_analytics.monthly_comparison.current_avg or 0 %}
+                                        {% set previous_avg = simple_analytics.monthly_comparison.previous_avg or 0 %}
+                                        {% if previous_avg > 0 %}
+                                            {% set change = ((current_avg - previous_avg) / previous_avg * 100) %}
+                                            <span class="badge {{ 'bg-success' if change >= 0 else 'bg-danger' }}">
+                                                {{ "+" if change >= 0 else "" }}{{ "%.1f"|format(change) }}%
+                                            </span>
+                                        {% elif current_avg > 0 %}
+                                            <span class="badge bg-success">+100%</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">N/A</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Monthly Summary Cards -->
+                        <div class="col-md-6">
+                            <h6 class="mb-4 text-center">Performance Summary</h6>
+                            
+                            <!-- Best Month Card -->
+                            <div class="card mb-3 text-center" style="background: linear-gradient(45deg, #10b981, #059669);">
+                                <div class="card-body text-white p-3">
+                                    <i class="fas fa-calendar-check fa-2x mb-2"></i>
+                                    <h6>Best Selling Month</h6>
+                                    {% if simple_analytics.best_month %}
+                                        <p class="mb-1 fw-bold">{{ simple_analytics.best_month.month }}</p>
+                                        <small>{{ simple_analytics.best_month.order_count }} orders - ৳{{ "%.0f"|format(simple_analytics.best_month.revenue) }}</small>
+                                    {% else %}
+                                        <small>No data yet</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Best Product Card -->
+                            <div class="card mb-3 text-center" style="background: linear-gradient(45deg, #8b5cf6, #7c3aed);">
+                                <div class="card-body text-white p-3">
+                                    <i class="fas fa-trophy fa-2x mb-2"></i>
+                                    <h6>Best Selling Product</h6>
+                                    {% if simple_analytics.best_product %}
+                                        <p class="mb-1 fw-bold">{{ simple_analytics.best_product.productName }}</p>
+                                        <small>{{ simple_analytics.best_product.total_sold }} units - ৳{{ "%.0f"|format(simple_analytics.best_product.total_revenue) }}</small>
+                                    {% else %}
+                                        <small>No data yet</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Current Month Total -->
+                            <div class="card text-center" style="background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));">
+                                <div class="card-body text-white p-3">
+                                    <i class="fas fa-calendar-alt fa-2x mb-2"></i>
+                                    <h6>This Month Total</h6>
+                                    <p class="mb-1 fw-bold">৳{{ "%.2f"|format(simple_analytics.monthly_comparison.current_revenue or 0) }}</p>
+                                    <small>{{ simple_analytics.monthly_comparison.current_orders or 0 }} orders, {{ simple_analytics.monthly_comparison.current_items or 0 }} items</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if (simple_analytics.monthly_comparison.current_revenue or 0) == 0 and (simple_analytics.monthly_comparison.previous_revenue or 0) == 0 %}
+                    <div class="alert alert-info mt-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>No sales data available for comparison.</strong><br>
+                        Start selling products to see your monthly performance analytics!
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-5">
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-icon">
+                    <i class="fas fa-box"></i>
+                </div>
+                <h3>{{ products|length }}</h3>
+                <p class="mb-0">Total Products</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-icon" style="background: linear-gradient(45deg, var(--success-color), var(--accent-color));">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <h3>{{ orders|length }}</h3>
+                <p class="mb-0">Recent Orders</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-icon" style="background: linear-gradient(45deg, var(--warning-color), #fbbf24);">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3>{% set low_stock = products|selectattr('currentStock', 'le', 5)|list %}{{ low_stock|length }}</h3>
+                <p class="mb-0">Low Stock Items</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-icon" style="background: linear-gradient(45deg, var(--danger-color), #f87171);">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <h3>{{ products|selectattr('currentStock', 'equalto', 0)|list|length }}</h3>
+                <p class="mb-0">Out of Stock</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Management -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-boxes me-2"></i>Product Inventory
+                    </h5>
+                    <a href="{{ url_for('add_product') }}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Add New Product
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if products %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Reorder Level</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <div class="product-icon" style="width: 40px; height: 40px; font-size: 1rem;">
+                                                    {% if 'electronic' in product.productCategory.lower() %}
+                                                        <i class="fas fa-laptop"></i>
+                                                    {% elif 'clothing' in product.productCategory.lower() %}
+                                                        <i class="fas fa-tshirt"></i>
+                                                    {% elif 'book' in product.productCategory.lower() %}
+                                                        <i class="fas fa-book"></i>
+                                                    {% elif 'home' in product.productCategory.lower() %}
+                                                        <i class="fas fa-home"></i>
+                                                    {% elif 'sport' in product.productCategory.lower() %}
+                                                        <i class="fas fa-dumbbell"></i>
+                                                    {% elif 'beauty' in product.productCategory.lower() %}
+                                                        <i class="fas fa-spa"></i>
+                                                    {% else %}
+                                                        <i class="fas fa-box"></i>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-1">{{ product.productName }}</h6>
+                                                <small class="text-muted">{{ product.brand }} - {{ product.productCategory }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="fw-bold text-success">৳{{ "%.2f"|format(product.pricePerUnit) }}</td>
+                                    <td>
+                                        {% if product.currentStock == 0 %}
+                                            <span class="badge bg-danger">{{ product.currentStock }}</span>
+                                        {% elif product.currentStock <= product.reorderLevel %}
+                                            <span class="badge bg-warning">{{ product.currentStock }}</span>
+                                        {% else %}
+                                            <span class="badge bg-success">{{ product.currentStock }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ product.reorderLevel }}</td>
+                                    <td>
+                                        {% if product.currentStock == 0 %}
+                                            <span class="badge bg-danger">Out of Stock</span>
+                                        {% elif product.currentStock <= product.reorderLevel %}
+                                            <span class="badge bg-warning">Low Stock</span>
+                                        {% else %}
+                                            <span class="badge bg-success">In Stock</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('edit_product', inventory_id=product.inventoryID) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                        <h5>No products added yet</h5>
+                        <p class="text-muted mb-3">Start by adding your first product to your inventory</p>
+                        <a href="{{ url_for('add_product') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Add Your First Product
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-receipt me-2"></i>Recent Orders
+                    </h5>
+                    <a href="{{ url_for('seller_orders') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-eye me-2"></i>View All Orders
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if orders %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Your Earnings</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td><strong>#{{ order.orderID }}</strong></td>
+                                    <td>{{ order.customer_name }}</td>
+                                    <td>{{ order.orderDate.strftime('%d %b %Y') }}</td>
+                                    <td class="fw-bold text-success">৳{{ "%.2f"|format(order.amount) if order.amount else "0.00" }}</td>
+                                    <td>
+                                        <form method="POST" action="{{ url_for('update_order_status') }}" class="d-inline">
+                                            <input type="hidden" name="order_id" value="{{ order.orderID }}">
+                                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" style="width: auto;">
+                                                <option value="pending" {{ 'selected' if order.orderStatus == 'pending' else '' }}>Pending</option>
+                                                <option value="confirmed" {{ 'selected' if order.orderStatus == 'confirmed' else '' }}>Confirmed</option>
+                                                <option value="processing" {{ 'selected' if order.orderStatus == 'processing' else '' }}>Processing</option>
+                                                <option value="shipped" {{ 'selected' if order.orderStatus == 'shipped' else '' }}>Shipped</option>
+                                                <option value="delivered" {{ 'selected' if order.orderStatus == 'delivered' else '' }}>Delivered</option>
+                                                <option value="cancelled" {{ 'selected' if order.orderStatus == 'cancelled' else '' }}>Cancelled</option>
+                                            </select>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+                        <h5>No orders yet</h5>
+                        <p class="text-muted">Orders from customers will appear here</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

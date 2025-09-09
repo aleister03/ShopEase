@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.orderID }} - ShopEase{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">
+            <i class="fas fa-receipt me-2"></i>Order #{{ order.orderID }}
+        </h2>
+        <a href="{{ url_for('order_history') }}" class="btn btn-outline-light">
+            <i class="fas fa-arrow-left me-2"></i>Back to Orders
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Order Items -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-box me-2"></i>Order Items
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    {% for item in order_items %}
+                    <div class="d-flex align-items-center p-3 border-bottom">
+                        <div class="me-3">
+                            <div class="product-icon" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                                {% if 'electronic' in item.productName.lower() %}
+                                    <i class="fas fa-laptop"></i>
+                                {% elif 'clothing' in item.productName.lower() %}
+                                    <i class="fas fa-tshirt"></i>
+                                {% elif 'book' in item.productName.lower() %}
+                                    <i class="fas fa-book"></i>
+                                {% elif 'home' in item.productName.lower() %}
+                                    <i class="fas fa-home"></i>
+                                {% elif 'sport' in item.productName.lower() %}
+                                    <i class="fas fa-dumbbell"></i>
+                                {% elif 'beauty' in item.productName.lower() %}
+                                    <i class="fas fa-spa"></i>
+                                {% else %}
+                                    <i class="fas fa-box"></i>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">{{ item.productName }}</h6>
+                            <p class="text-muted mb-0">{{ item.quantity }} × ৳{{ "%.2f"|format(item.priceOnSale) }}</p>
+                        </div>
+                        <div class="fw-bold text-primary">৳{{ "%.2f"|format(item.total_price) }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Order Status Timeline -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-route me-2"></i>Order Status
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item {{ 'active' if order.orderStatus in ['pending', 'packed', 'shipped', 'delivered'] else '' }}">
+                            <div class="timeline-icon bg-warning">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h6>Order Placed</h6>
+                                <small>{{ order.orderDate.strftime('%d %b %Y, %I:%M %p') }}</small>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item {{ 'active' if order.orderStatus in ['packed', 'shipped', 'delivered'] else '' }}">
+                            <div class="timeline-icon {{ 'bg-info' if order.orderStatus in ['packed', 'shipped', 'delivered'] else 'bg-secondary' }}">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h6>Order Packed</h6>
+                                <small>{{ 'Processing...' if order.orderStatus == 'pending' else 'Packed and ready for shipping' }}</small>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item {{ 'active' if order.orderStatus in ['shipped', 'delivered'] else '' }}">
+                            <div class="timeline-icon {{ 'bg-primary' if order.orderStatus in ['shipped', 'delivered'] else 'bg-secondary' }}">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h6>Order Shipped</h6>
+                                <small>{{ 'Out for delivery' if order.orderStatus == 'shipped' else ('Delivered' if order.orderStatus == 'delivered' else 'Waiting for shipment') }}</small>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item {{ 'active' if order.orderStatus == 'delivered' else '' }}">
+                            <div class="timeline-icon {{ 'bg-success' if order.orderStatus == 'delivered' else 'bg-secondary' }}">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h6>Order Delivered</h6>
+                                <small>{{ 'Order delivered successfully' if order.orderStatus == 'delivered' else 'Pending delivery' }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Order Summary -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>৳{{ "%.2f"|format(order.amount) if order.amount else "0.00" }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Delivery:</span>
+                        <span class="text-success">FREE</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="fw-bold">Total:</span>
+                        <span class="fw-bold text-primary">৳{{ "%.2f"|format(order.amount) if order.amount else "0.00" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Information -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Payment Information</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2">
+                        <i class="fas fa-money-bill me-2"></i>
+                        <strong>Method:</strong> {{ order.paymentMethod }}
+                    </p>
+                    <p class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Status:</strong>
+                        {% if order.paymentStatus == 'pending' %}
+                            <span class="badge bg-warning">Pending</span>
+                        {% elif order.paymentStatus == 'completed' %}
+                            <span class="badge bg-success">Completed</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ order.paymentStatus|title }}</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -21px;
+    top: 30px;
+    width: 2px;
+    height: calc(100% + 20px);
+    background: #dee2e6;
+}
+
+.timeline-item:last-child::before {
+    display: none;
+}
+
+.timeline-icon {
+    position: absolute;
+    left: -30px;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.timeline-content {
+    margin-left: 20px;
+}
+
+.timeline-item.active .timeline-icon {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+}
+</style>
+{% endblock %}
