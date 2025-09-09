@@ -5,8 +5,8 @@ import mysql.connector
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
-    'password': '12345',
-    'database': 'ShopEaseDB'
+    'password': 'enter_your_password',
+    'database': 'enter_your_database_name'
 }
 
 def simple_password_update():
