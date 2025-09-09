@@ -1,7 +1,11 @@
 # ShopEase
 _Smart Shop Management System_
-ShopEase is a platform that offers user friendly interface where seller can handle store activities efficiently and customer receives smooth service.
-It was done as a part of our CSE370 group project. We used html, css, js, mysql, flask for this project.
+
+**Features:**
+
+- Customers have their own personalized feed with a recommendation system based on their activity, can see their orders and orders history, cart and wishlist management, personalized dashboard with loyalty points system.
+- Seller can add or remove products, can control the product orders, can compare sales between present and previous month.
+- Admin has the access to see users and ban/unban them, can add new discount offers, can view and track orders.
 
 **Instrunctions:**
 1. Use sql_schema.sql and sample_data.sql to set up the database
