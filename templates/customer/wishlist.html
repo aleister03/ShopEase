@@ -47,7 +47,6 @@
                         </a>
                         
                         {% if item.currentStock > 0 %}
-                        <!-- Fixed: Use move_to_cart route instead of add_to_cart -->
                         <form method="POST" action="{{ url_for('move_to_cart') }}" class="d-inline">
                             <input type="hidden" name="inventory_id" value="{{ item.inventoryID }}">
                             <input type="hidden" name="product_id" value="{{ item.productID }}">
