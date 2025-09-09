@@ -17,8 +17,8 @@ LOYALTY_POINTS_RATE = Decimal('0.01')  # 1% of discounted subtotal
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
-    'password': '12345',
-    'database': 'shopeasedb'
+    'password': 'enter_your_password',
+    'database': 'enter_your_database_name'
 }
 
 def get_db_connection():
