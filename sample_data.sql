@@ -1,15 +1,10 @@
 INSERT INTO Users (name, email, phone, password, role, status, address, joinDate, loyaltyPoints) VALUES
--- Admin
-('Md. Rahman Ahmed', 'admin@shopbd.com', '01711234567', 'scrypt:32768:8:1$BO1tHsmqbYBlM0Pv$731874a21e4044b40e335cd27664fa6f50e9feeeca2f89125cc0d33569f703558613e321a95b4b32c2310411b72311', 'admin', 'active', 'Dhanmondi 15, Dhaka-1209', '2025-06-15', 0),
-
--- Sellers (each specializing in different categories)
+('Admin Account', 'admin@shopbd.com', '01711234567', 'scrypt:32768:8:1$BO1tHsmqbYBlM0Pv$731874a21e4044b40e335cd27664fa6f50e9feeeca2f89125cc0d33569f703558613e321a95b4b32c2310411b72311', 'admin', 'active', 'Dhanmondi 15, Dhaka-1209', '2025-06-15', 0),
 ('Karim Electronics', 'karim@electronics.bd', '01812345678', 'scrypt:32768:8:1$BO1tHsmqbYBlM0Pv$731874a21e4044b40e335cd27664fa6f50e9feeeca2f89125cc0d33569f703558613e321a95b4b32c2310411b7231', 'seller', 'active', 'New Market, Dhaka-1205', '2025-06-20', 0),
 ('Fatima Fashion House', 'fatima@fashion.bd', '01913456789', 'scrypt:32768:8:1$BO1tHsmqbYBlM0Pv$731874a21e4044b40e335cd27664fa6f50e9feeeca2f89125cc0d33569f703558613e321a95b4b32c2310411b7231', 'seller', 'active', 'Chawk Bazar, Dhaka-1211', '2025-06-25', 0),
 ('Hasan Book Corner', 'hasan@books.bd', '01534567890', 'scrypt:32768:8:1$BO1tHsmqbYBlM0Pv$731874a21e4044b40e335cd27664fa6f50e9feeeca2f89125cc0d33569f703558613e321a95b4b32c2310411b7231', 'seller', 'active', 'Nilkhet, Dhaka-1205', '2025-07-01', 0),
 ('Nasir Home Decor', 'nasir@homedecor.bd', '01645678901', 'scrypt:32768:8:1$BO1tHsmqbYBlM0Pv$731874a21e4044b40e335cd27664fa6f50e9feeeca2f89125cc0d33569f703558613e321a95b4b32c2310411b7231', 'seller', 'active', 'Elephant Road, Dhaka-1205', '2025-07-05', 0),
 ('Sports Zone BD', 'sports@zone.bd', '01756789012', 'scrypt:32768:8:1$BO1tHsmqbYBlM0Pv$731874a21e4044b40e335cd27664fa6f50e9feeeca2f89125cc0d33569f703558613e321a95b4b32c2310411b7231', 'seller', 'active', 'Stadium Market, Dhaka-1000', '2025-07-10', 0),
-
--- Customers (20 users with calculated loyalty points)
 ('Md. Abdul Karim', 'karim.user@gmail.com', '01611111111', 'scrypt:32768:8:1$BO1tHsmqbYBlM0Pv$731874a21e4044b40e335cd27664fa6f50e9feeeca2f89125cc0d33569f703558613e321a95b4b32c2310411b7231', 'customer', 'active', 'Mirpur 10, Dhaka-1216', '2025-06-30', 87),
 ('Rashida Begum', 'rashida@yahoo.com', '01722222222', 'scrypt:32768:8:1$BO1tHsmqbYBlM0Pv$731874a21e4044b40e335cd27664fa6f50e9feeeca2f89125cc0d33569f703558613e321a95b4b32c2310411b7231', 'customer', 'active', 'Uttara Sector 7, Dhaka-1230', '2025-07-02', 156),
 ('Shakib Ahmed', 'shakib.ahmed@gmail.com', '01833333333', 'scrypt:32768:8:1$BO1tHsmqbYBlM0Pv$731874a21e4044b40e335cd27664fa6f50e9feeeca2f89125cc0d33569f703558613e321a95b4b32c2310411b7231', 'customer', 'active', 'Gulshan 1, Dhaka-1212', '2025-07-05', 234),
@@ -30,99 +25,73 @@ INSERT INTO Users (name, email, phone, password, role, status, address, joinDate
 ('Yasmin Akhter', 'yasmin.akhter@gmail.com', '01988888889', 'scrypt:32768:8:1$BO1tHsmqbYBlM0Pv$731874a21e4044b40e335cd27664fa6f50e9feeeca2f89125cc0d33569f703558613e321a95b4b32c2310411b7231', 'customer', 'active', 'Paltan, Dhaka-1000', '2025-08-22', 234),
 ('Mahbub Ahmed', 'mahbub.ahmed@gmail.com', '01599999990', 'scrypt:32768:8:1$BO1tHsmqbYBlM0Pv$731874a21e4044b40e335cd27664fa6f50e9feeeca2f89125cc0d33569f703558613e321a95b4b32c2310411b7231', 'customer', 'active', 'Badda, Dhaka-1212', '2025-08-25', 145),
 ('Rehana Parveen', 'rehana.p@gmail.com', '01600000001', 'scrypt:32768:8:1$BO1tHsmqbYBlM0Pv$731874a21e4044b40e335cd27664fa6f50e9feeeca2f89125cc0d33569f703558613e321a95b4b32c2310411b7231', 'customer', 'active', 'Rampura, Dhaka-1219', '2025-08-28', 189);
-
--- Insert Products by Category
 INSERT INTO Products (productName, productCategory, brand, dateAdded) VALUES
--- Electronics
 ('Samsung Galaxy A54 5G', 'electronics', 'Samsung', '2025-06-20'),
 ('iPhone 15', 'electronics', 'Apple', '2025-06-21'),
 ('Walton Smart TV 43 inch', 'electronics', 'Walton', '2025-06-22'),
 ('HP Pavilion Laptop', 'electronics', 'HP', '2025-06-23'),
 ('Sony WH-1000XM4 Headphones', 'electronics', 'Sony', '2025-06-24'),
 ('Canon EOS 1500D Camera', 'electronics', 'Canon', '2025-06-25'),
-
--- Clothing
 ('Cotton Punjabi for Men', 'clothing', 'Aarong', '2025-06-25'),
 ('Ladies Kurti', 'clothing', 'Kay Kraft', '2025-06-26'),
 ('Denim Jeans', 'clothing', 'Yellow', '2025-06-27'),
 ('Formal Shirt', 'clothing', 'Ecstasy', '2025-06-28'),
 ('Saree - Jamdani', 'clothing', 'Aarong', '2025-06-29'),
 ('T-Shirt Cotton', 'clothing', 'Cats Eye', '2025-06-30'),
-
--- Books
 ('Himu Series - Misir Ali', 'books', 'Anyaprakash', '2025-07-01'),
 ('Physics - Class XI-XII', 'books', 'Lecture Publications', '2025-07-02'),
 ('English Grammar', 'books', 'PC Das', '2025-07-03'),
 ('Bangla Literature', 'books', 'University Press', '2025-07-04'),
 ('Programming with Python', 'books', 'Rokomari Publications', '2025-07-05'),
 ('Islamic Studies', 'books', 'Maktaba Publications', '2025-07-06'),
-
--- Home & Kitchen
 ('Rice Cooker 1.5L', 'home & kitchen', 'Miyako', '2025-07-10'),
 ('Dinner Set 24 pieces', 'home & kitchen', 'Melamine', '2025-07-11'),
 ('Electric Kettle', 'home & kitchen', 'Philips', '2025-07-12'),
 ('Pressure Cooker 5L', 'home & kitchen', 'Hawkins', '2025-07-13'),
 ('Kitchen Knife Set', 'home & kitchen', 'German Steel', '2025-07-14'),
 ('Table Fan', 'home & kitchen', 'KDK', '2025-07-15'),
-
--- Sports & Outdoors
 ('Cricket Bat Willow', 'sports & outdoors', 'SS', '2025-07-15'),
 ('Football Size 5', 'sports & outdoors', 'Mikasa', '2025-07-16'),
 ('Badminton Racket', 'sports & outdoors', 'Yonex', '2025-07-17'),
 ('Yoga Mat', 'sports & outdoors', 'Nike', '2025-07-18'),
 ('Dumbbells Set 20kg', 'sports & outdoors', 'Adidas', '2025-07-19'),
 ('Cricket Ball Leather', 'sports & outdoors', 'MRF', '2025-07-20');
-
--- Insert Inventory (Sellers can only sell in their categories)
 INSERT INTO Inventory (productID, sellerID, pricePerUnit, currentStock, reorderLevel) VALUES
--- Karim Electronics (Electronics - sellerID: 2)
-(1, 2, 32000.00, 25, 5), -- Samsung Galaxy A54
-(2, 2, 89000.00, 15, 3), -- iPhone 15
-(3, 2, 28000.00, 30, 8), -- Walton TV
-(4, 2, 55000.00, 20, 5), -- HP Laptop
-(5, 2, 22000.00, 35, 10), -- Sony Headphones
-(6, 2, 45000.00, 12, 3), -- Canon Camera
-
--- Fatima Fashion House (Clothing - sellerID: 3)
-(7, 3, 1200.00, 50, 15), -- Cotton Punjabi
-(8, 3, 800.00, 45, 12), -- Ladies Kurti
-(9, 3, 1500.00, 40, 10), -- Denim Jeans
-(10, 3, 1000.00, 55, 15), -- Formal Shirt
-(11, 3, 3500.00, 25, 8), -- Saree
-(12, 3, 600.00, 60, 20), -- T-Shirt
-
--- Hasan Book Corner (Books - sellerID: 4)
-(13, 4, 350.00, 100, 25), -- Himu Series
-(14, 4, 450.00, 80, 20), -- Physics Book
-(15, 4, 280.00, 120, 30), -- English Grammar
-(16, 4, 320.00, 90, 25), -- Bangla Literature
-(17, 4, 550.00, 70, 15), -- Python Book
-(18, 4, 300.00, 110, 30), -- Islamic Studies
-
--- Nasir Home Decor (Home & Kitchen - sellerID: 5)
-(19, 5, 2800.00, 30, 8), -- Rice Cooker
-(20, 5, 1200.00, 25, 10), -- Dinner Set
-(21, 5, 1500.00, 40, 12), -- Electric Kettle
-(22, 5, 3200.00, 20, 5), -- Pressure Cooker
-(23, 5, 800.00, 50, 15), -- Kitchen Knife Set
-(24, 5, 2200.00, 35, 10), -- Table Fan
-
--- Sports Zone BD (Sports & Outdoors - sellerID: 6)
-(25, 6, 2500.00, 25, 8), -- Cricket Bat
-(26, 6, 1200.00, 40, 12), -- Football
-(27, 6, 1800.00, 30, 10), -- Badminton Racket
-(28, 6, 1500.00, 45, 15), -- Yoga Mat
-(29, 6, 8500.00, 15, 5), -- Dumbbells Set
-(30, 6, 800.00, 60, 20); -- Cricket Ball
-
--- Insert Discounts (Limited and reasonable)
+(1, 2, 32000.00, 25, 5),
+(2, 2, 89000.00, 15, 3),
+(3, 2, 28000.00, 30, 8),
+(4, 2, 55000.00, 20, 5),
+(5, 2, 22000.00, 35, 10),
+(6, 2, 45000.00, 12, 3),
+(7, 3, 1200.00, 50, 15),
+(8, 3, 800.00, 45, 12),
+(9, 3, 1500.00, 40, 10),
+(10, 3, 1000.00, 55, 15),
+(11, 3, 3500.00, 25, 8), 
+(12, 3, 600.00, 60, 20),
+(13, 4, 350.00, 100, 25),
+(14, 4, 450.00, 80, 20),
+(15, 4, 280.00, 120, 30), 
+(16, 4, 320.00, 90, 25),
+(17, 4, 550.00, 70, 15),
+(18, 4, 300.00, 110, 30),
+(19, 5, 2800.00, 30, 8),
+(20, 5, 1200.00, 25, 10),
+(21, 5, 1500.00, 40, 12),
+(22, 5, 3200.00, 20, 5),
+(23, 5, 800.00, 50, 15),
+(24, 5, 2200.00, 35, 10),
+(25, 6, 2500.00, 25, 8),
+(26, 6, 1200.00, 40, 12),
+(27, 6, 1800.00, 30, 10),
+(28, 6, 1500.00, 45, 15),
+(29, 6, 8500.00, 15, 5),
+(30, 6, 800.00, 60, 20);
 INSERT INTO Discounts (discountCode, discountType, discountValue, startDate, endDate, useLimit) VALUES
 ('EID2025', 'percentage', 10.00, '2025-07-15', '2025-07-25', 100),
 ('NEWUSER', 'fixed_amount', 200.00, '2025-06-01', '2025-12-31', 500),
 ('ELECTRONICS5', 'percentage', 5.00, '2025-08-01', '2025-08-31', 50),
 ('BOOKFAIR', 'percentage', 15.00, '2025-08-10', '2025-08-20', 200);
-
--- Insert Orders (Recent 3 months)
 INSERT INTO Orders (orderID, userID, orderDate, orderStatus) VALUES
 (1, 7, '2025-07-01 10:30:00', 'delivered'),
 (2, 8, '2025-07-02 14:20:00', 'delivered'),
@@ -149,204 +118,130 @@ INSERT INTO Orders (orderID, userID, orderDate, orderStatus) VALUES
 (23, 11, '2025-08-22 12:15:00', 'confirmed'),
 (24, 13, '2025-08-25 15:30:00', 'pending'),
 (25, 15, '2025-09-01 11:20:00', 'pending');
-
--- Insert Order Items with CORRECTED calculations
 INSERT INTO OrderItems (orderID, inventoryID, quantity, priceOnSale, discountID) VALUES
--- Order 1 - userID: 7 (Total: 8700)
-(1, 7, 2, 1200.00, NULL), -- Punjabi x2 = 2400
-(1, 12, 3, 600.00, NULL), -- T-Shirt x3 = 1800
-(1, 13, 5, 350.00, NULL), -- Books x5 = 1750
-(1, 23, 1, 800.00, NULL), -- Knife Set = 800
-(1, 26, 2, 1200.00, NULL), -- Football x2 = 2400
--- Total: 8700 (87 loyalty points)
-
--- Order 2 - userID: 8 (Total: 15600)
-(2, 8, 3, 800.00, NULL), -- Kurti x3 = 2400
-(2, 9, 2, 1500.00, NULL), -- Jeans x2 = 3000
-(2, 14, 4, 450.00, NULL), -- Physics Books x4 = 1800
-(2, 19, 1, 2800.00, NULL), -- Rice Cooker = 2800
-(2, 21, 2, 1500.00, NULL), -- Electric Kettle x2 = 3000
-(2, 28, 2, 1500.00, NULL), -- Yoga Mat x2 = 3000
--- Total: 15600 (156 loyalty points)
-
--- Order 3 - userID: 9 (Total: 23400)
-(3, 1, 1, 31000.00, NULL), -- Samsung phone (small discount) = 31000
-(3, 27, 1, 1800.00, NULL), -- Badminton racket = 1800
-(3, 15, 2, 280.00, NULL), -- Grammar books x2 = 560
-(3, 30, 1, 800.00, NULL), -- Cricket ball = 800
--- Total: 23400 (234 loyalty points)
-
--- Order 4 - userID: 10 (Total: 9200)
-(4, 10, 2, 1000.00, NULL), -- Formal Shirt x2 = 2000
-(4, 11, 1, 3500.00, NULL), -- Saree = 3500
-(4, 20, 1, 1200.00, NULL), -- Dinner Set = 1200
-(4, 24, 1, 2200.00, NULL), -- Table Fan = 2200
-(4, 16, 2, 320.00, NULL), -- Bangla Literature x2 = 640
--- Total: 9200 (92 loyalty points)
-
--- Order 5 - userID: 11 (Total: 17800)
-(5, 17, 1, 550.00, NULL), -- Python book = 550
-(5, 22, 1, 3200.00, NULL), -- Pressure cooker = 3200
-(5, 25, 2, 2500.00, NULL), -- Cricket bats x2 = 5000
-(5, 7, 3, 1200.00, NULL), -- Punjabi x3 = 3600
-(5, 12, 5, 600.00, NULL), -- T-Shirts x5 = 3000
-(5, 18, 4, 300.00, NULL), -- Islamic Studies x4 = 1200
-(5, 30, 3, 800.00, NULL), -- Cricket balls x3 = 2400
--- Total: 17800 (178 loyalty points)
-
--- Order 6 - userID: 12 (Total: 6300)
-(6, 8, 2, 800.00, NULL), -- Kurti x2 = 1600
-(6, 13, 3, 350.00, NULL), -- Himu series x3 = 1050
-(6, 21, 1, 1500.00, NULL), -- Electric Kettle = 1500
-(6, 26, 2, 1200.00, NULL), -- Football x2 = 2400
-(6, 23, 1, 800.00, NULL), -- Knife Set = 800
--- Total: 6300 (63 loyalty points)
-
--- Order 7 - userID: 13 (Total: 14500)
-(7, 9, 2, 1500.00, NULL), -- Jeans x2 = 3000
-(7, 10, 3, 1000.00, NULL), -- Formal Shirt x3 = 3000
-(7, 14, 4, 450.00, NULL), -- Physics Books x4 = 1800
-(7, 19, 1, 2800.00, NULL), -- Rice Cooker = 2800
-(7, 28, 2, 1500.00, NULL), -- Yoga Mat x2 = 3000
-(7, 30, 2, 800.00, NULL), -- Cricket balls x2 = 1600
-(7, 15, 1, 238.00, 4), -- Grammar book with 15% discount = 238
--- Total: 14500 (145 loyalty points)
-
--- Order 8 - userID: 14 (Total: 8900)
-(8, 11, 1, 3500.00, NULL), -- Saree = 3500
-(8, 16, 3, 320.00, NULL), -- Bangla Literature x3 = 960
-(8, 20, 2, 1200.00, NULL), -- Dinner Set x2 = 2400
-(8, 24, 1, 2200.00, NULL), -- Table Fan = 2200
-(8, 27, 1, 1800.00, NULL), -- Badminton Racket = 1800
--- Total: 8900 (89 loyalty points)
-
--- Order 9 - userID: 15 (Total: 26700)
-(9, 7, 4, 1200.00, NULL), -- Punjabi x4 = 4800
-(9, 8, 3, 800.00, NULL), -- Kurti x3 = 2400
-(9, 12, 5, 600.00, NULL), -- T-Shirts x5 = 3000
-(9, 13, 8, 350.00, NULL), -- Himu series x8 = 2800
-(9, 17, 2, 550.00, NULL), -- Python books x2 = 1100
-(9, 19, 2, 2800.00, NULL), -- Rice Cooker x2 = 5600
-(9, 21, 3, 1500.00, NULL), -- Electric Kettle x3 = 4500
-(9, 25, 1, 2500.00, NULL), -- Cricket Bat = 2500
--- Total: 26700 (267 loyalty points)
-
--- Order 10 - userID: 16 (Total: 13400)
-(10, 9, 2, 1500.00, NULL), -- Jeans x2 = 3000
-(10, 10, 3, 1000.00, NULL), -- Formal Shirt x3 = 3000
-(10, 14, 4, 450.00, NULL), -- Physics Books x4 = 1800
-(10, 18, 5, 300.00, NULL), -- Islamic Studies x5 = 1500
-(10, 22, 1, 3200.00, NULL), -- Pressure Cooker = 3200
-(10, 26, 1, 1200.00, NULL), -- Football = 1200
-(10, 28, 1, 1500.00, NULL), -- Yoga Mat = 1500
--- Total: 13400 (134 loyalty points)
-
--- Order 11 - userID: 17 (Total: 9800)
-(11, 11, 1, 3500.00, NULL), -- Saree = 3500
-(11, 15, 4, 280.00, NULL), -- Grammar books x4 = 1120
-(11, 20, 2, 1200.00, NULL), -- Dinner Set x2 = 2400
-(11, 24, 1, 2200.00, NULL), -- Table Fan = 2200
-(11, 30, 1, 800.00, NULL), -- Cricket Ball = 800
--- Total: 9800 (98 loyalty points)
-
--- Order 12 - userID: 18 (Total: 17600)
-(12, 7, 3, 1200.00, NULL), -- Punjabi x3 = 3600
-(12, 8, 4, 800.00, NULL), -- Kurti x4 = 3200
-(12, 13, 6, 350.00, NULL), -- Himu series x6 = 2100
-(12, 16, 5, 320.00, NULL), -- Bangla Literature x5 = 1600
-(12, 19, 2, 2800.00, NULL), -- Rice Cooker x2 = 5600
-(12, 27, 1, 1800.00, NULL), -- Badminton Racket = 1800
--- Total: 17600 (176 loyalty points)
-
--- Order 13 - userID: 19 (Total: 11200)
-(13, 9, 2, 1500.00, NULL), -- Jeans x2 = 3000
-(13, 12, 4, 600.00, NULL), -- T-Shirts x4 = 2400
-(13, 17, 2, 550.00, NULL), -- Python books x2 = 1100
-(13, 23, 3, 800.00, NULL), -- Knife Set x3 = 2400
-(13, 27, 2, 1800.00, NULL), -- Badminton Racket x2 = 3600
--- Total: 11200 (112 loyalty points)
-
--- Order 14 - userID: 20 (Total: 20300)
-(14, 8, 5, 800.00, NULL), -- Kurti x5 = 4000
-(14, 10, 4, 1000.00, NULL), -- Formal Shirt x4 = 4000
-(14, 14, 6, 450.00, NULL), -- Physics Books x6 = 2700
-(14, 18, 8, 300.00, NULL), -- Islamic Studies x8 = 2400
-(14, 21, 3, 1500.00, NULL), -- Electric Kettle x3 = 4500
-(14, 26, 2, 1200.00, NULL), -- Football x2 = 2400
-(14, 30, 1, 800.00, NULL), -- Cricket Ball = 800
--- Total: 20300 (203 loyalty points)
-
--- Order 15 - userID: 21 (Total: 8700)
-(15, 7, 2, 1200.00, NULL), -- Punjabi x2 = 2400
-(15, 13, 5, 350.00, NULL), -- Himu series x5 = 1750
-(15, 19, 1, 2800.00, NULL), -- Rice Cooker = 2800
-(15, 25, 1, 2500.00, NULL), -- Cricket Bat = 2500
--- Total: 8700 (87 loyalty points)
-
--- Order 16 - userID: 22 (Total: 15600)
-(16, 11, 2, 3500.00, NULL), -- Saree x2 = 7000
-(16, 15, 6, 280.00, NULL), -- Grammar books x6 = 1680
-(16, 20, 3, 1200.00, NULL), -- Dinner Set x3 = 3600
-(16, 28, 2, 1500.00, NULL), -- Yoga Mat x2 = 3000
-(16, 30, 4, 800.00, NULL), -- Cricket Ball x4 = 3200
--- Total: 15600 (156 loyalty points)
-
--- Order 17 - userID: 23 (Total: 9100)
-(17, 9, 1, 1500.00, NULL), -- Jeans = 1500
-(17, 12, 3, 600.00, NULL), -- T-Shirts x3 = 1800
-(17, 16, 4, 320.00, NULL), -- Bangla Literature x4 = 1280
-(17, 22, 1, 3200.00, NULL), -- Pressure Cooker = 3200
-(17, 24, 1, 2200.00, NULL), -- Table Fan = 2200
--- Total: 9100 (91 loyalty points)
-
--- Order 18 - userID: 24 (Total: 23400)
-(18, 7, 4, 1200.00, NULL), -- Punjabi x4 = 4800
-(18, 8, 6, 800.00, NULL), -- Kurti x6 = 4800
-(18, 13, 10, 350.00, NULL), -- Himu series x10 = 3500
-(18, 14, 8, 450.00, NULL), -- Physics Books x8 = 3600
-(18, 17, 4, 550.00, NULL), -- Python books x4 = 2200
-(18, 19, 3, 2800.00, NULL), -- Rice Cooker x3 = 8400
--- Total: 23400 (234 loyalty points)
-
--- Order 19 - userID: 25 (Total: 14500)
-(19, 9, 3, 1500.00, NULL), -- Jeans x3 = 4500
-(19, 10, 4, 1000.00, NULL), -- Formal Shirt x4 = 4000
-(19, 15, 5, 280.00, NULL), -- Grammar books x5 = 1400
-(19, 18, 6, 300.00, NULL), -- Islamic Studies x6 = 1800
-(19, 21, 2, 1500.00, NULL), -- Electric Kettle x2 = 3000
--- Total: 14500 (145 loyalty points)
-
--- Order 20 - userID: 26 (Total: 18900)
-(20, 11, 2, 3500.00, NULL), -- Saree x2 = 7000
-(20, 16, 6, 320.00, NULL), -- Bangla Literature x6 = 1920
-(20, 20, 4, 1200.00, NULL), -- Dinner Set x4 = 4800
-(20, 22, 2, 3200.00, NULL), -- Pressure Cooker x2 = 6400
-(20, 28, 3, 1500.00, NULL), -- Yoga Mat x3 = 4500
--- Total: 18900 (189 loyalty points)
-
--- Recent orders (still active) - smaller amounts for pending orders
-(21, 8, 2, 800.00, NULL), -- Kurti x2 = 1600
-(21, 13, 3, 350.00, NULL), -- Himu series x3 = 1050
-(21, 23, 1, 800.00, NULL), -- Knife Set = 800
--- Order 21 Total: 3450
-
-(22, 7, 1, 1200.00, NULL), -- Punjabi = 1200
-(22, 19, 1, 2800.00, NULL), -- Rice Cooker = 2800
--- Order 22 Total: 4000
-
-(23, 12, 4, 600.00, NULL), -- T-Shirts x4 = 2400
-(23, 17, 1, 550.00, NULL), -- Python book = 550
--- Order 23 Total: 2950
-
-(24, 14, 3, 450.00, NULL), -- Physics Books x3 = 1350
-(24, 21, 1, 1500.00, NULL), -- Electric Kettle = 1500
--- Order 24 Total: 2850
-
-(25, 15, 2, 280.00, NULL), -- Grammar books x2 = 560
-(25, 26, 1, 1200.00, NULL); -- Football = 1200
--- Order 25 Total: 1760
-
--- Insert Payments
+(1, 7, 2, 1200.00, NULL),
+(1, 12, 3, 600.00, NULL),
+(1, 13, 5, 350.00, NULL),
+(1, 23, 1, 800.00, NULL),
+(1, 26, 2, 1200.00, NULL),
+(2, 8, 3, 800.00, NULL),
+(2, 9, 2, 1500.00, NULL),
+(2, 14, 4, 450.00, NULL),
+(2, 19, 1, 2800.00, NULL),
+(2, 21, 2, 1500.00, NULL),
+(2, 28, 2, 1500.00, NULL),
+(3, 1, 1, 31000.00, NULL),
+(3, 27, 1, 1800.00, NULL),
+(3, 15, 2, 280.00, NULL),
+(3, 30, 1, 800.00, NULL),
+(4, 10, 2, 1000.00, NULL),
+(4, 11, 1, 3500.00, NULL),
+(4, 20, 1, 1200.00, NULL),
+(4, 24, 1, 2200.00, NULL),
+(4, 16, 2, 320.00, NULL),
+(5, 17, 1, 550.00, NULL),
+(5, 22, 1, 3200.00, NULL),
+(5, 25, 2, 2500.00, NULL),
+(5, 7, 3, 1200.00, NULL),
+(5, 12, 5, 600.00, NULL),
+(5, 18, 4, 300.00, NULL),
+(5, 30, 3, 800.00, NULL),
+(6, 8, 2, 800.00, NULL),
+(6, 13, 3, 350.00, NULL),
+(6, 21, 1, 1500.00, NULL),
+(6, 26, 2, 1200.00, NULL),
+(6, 23, 1, 800.00, NULL),
+(7, 9, 2, 1500.00, NULL),
+(7, 10, 3, 1000.00, NULL),
+(7, 14, 4, 450.00, NULL),
+(7, 19, 1, 2800.00, NULL),
+(7, 28, 2, 1500.00, NULL),
+(7, 30, 2, 800.00, NULL),
+(7, 15, 1, 238.00, 4),
+(8, 11, 1, 3500.00, NULL),
+(8, 16, 3, 320.00, NULL),
+(8, 20, 2, 1200.00, NULL),
+(8, 24, 1, 2200.00, NULL),
+(8, 27, 1, 1800.00, NULL),
+(9, 7, 4, 1200.00, NULL),
+(9, 8, 3, 800.00, NULL),
+(9, 12, 5, 600.00, NULL),
+(9, 13, 8, 350.00, NULL),
+(9, 17, 2, 550.00, NULL),
+(9, 19, 2, 2800.00, NULL),
+(9, 21, 3, 1500.00, NULL),
+(9, 25, 1, 2500.00, NULL),
+(10, 9, 2, 1500.00, NULL),
+(10, 10, 3, 1000.00, NULL),
+(10, 14, 4, 450.00, NULL),
+(10, 18, 5, 300.00, NULL),
+(10, 22, 1, 3200.00, NULL),
+(10, 26, 1, 1200.00, NULL),
+(10, 28, 1, 1500.00, NULL),
+(11, 11, 1, 3500.00, NULL),
+(11, 15, 4, 280.00, NULL),
+(11, 20, 2, 1200.00, NULL),
+(11, 24, 1, 2200.00, NULL),
+(11, 30, 1, 800.00, NULL),
+(12, 7, 3, 1200.00, NULL),
+(12, 8, 4, 800.00, NULL),
+(12, 13, 6, 350.00, NULL),
+(12, 16, 5, 320.00, NULL),
+(12, 19, 2, 2800.00, NULL),
+(12, 27, 1, 1800.00, NULL),
+(13, 9, 2, 1500.00, NULL),
+(13, 12, 4, 600.00, NULL),
+(13, 17, 2, 550.00, NULL),
+(13, 23, 3, 800.00, NULL),
+(13, 27, 2, 1800.00, NULL),
+(14, 8, 5, 800.00, NULL),
+(14, 10, 4, 1000.00, NULL),
+(14, 14, 6, 450.00, NULL),
+(14, 18, 8, 300.00, NULL),
+(14, 21, 3, 1500.00, NULL),
+(14, 26, 2, 1200.00, NULL),
+(14, 30, 1, 800.00, NULL),
+(15, 7, 2, 1200.00, NULL),
+(15, 13, 5, 350.00, NULL),
+(15, 19, 1, 2800.00, NULL),
+(15, 25, 1, 2500.00, NULL),
+(16, 11, 2, 3500.00, NULL),
+(16, 15, 6, 280.00, NULL), 
+(16, 20, 3, 1200.00, NULL),
+(16, 28, 2, 1500.00, NULL),
+(16, 30, 4, 800.00, NULL),
+(17, 9, 1, 1500.00, NULL),
+(17, 12, 3, 600.00, NULL),
+(17, 16, 4, 320.00, NULL),
+(17, 22, 1, 3200.00, NULL),
+(17, 24, 1, 2200.00, NULL),
+(18, 7, 4, 1200.00, NULL),
+(18, 8, 6, 800.00, NULL),
+(18, 13, 10, 350.00, NULL),
+(18, 14, 8, 450.00, NULL),
+(18, 17, 4, 550.00, NULL),
+(18, 19, 3, 2800.00, NULL),
+(19, 9, 3, 1500.00, NULL),
+(19, 10, 4, 1000.00, NULL),
+(19, 15, 5, 280.00, NULL),
+(19, 18, 6, 300.00, NULL),
+(19, 21, 2, 1500.00, NULL),
+(20, 11, 2, 3500.00, NULL),
+(20, 16, 6, 320.00, NULL),
+(20, 20, 4, 1200.00, NULL),
+(20, 22, 2, 3200.00, NULL),
+(20, 28, 3, 1500.00, NULL),
+(21, 8, 2, 800.00, NULL),
+(21, 13, 3, 350.00, NULL),
+(21, 23, 1, 800.00, NULL),
+(22, 7, 1, 1200.00, NULL),
+(22, 19, 1, 2800.00, NULL),
+(23, 12, 4, 600.00, NULL),
+(23, 17, 1, 550.00, NULL),
+(24, 14, 3, 450.00, NULL), 
+(24, 21, 1, 1500.00, NULL),
+(25, 15, 2, 280.00, NULL),
+(25, 26, 1, 1200.00, NULL);
 INSERT INTO Payments (orderID, transactionDate, amount, paymentMethod, paymentStatus) VALUES
 (1, '2025-07-01 11:00:00', 8700.00, 'cash_on_delivery', 'completed'),
 (2, '2025-07-02 15:00:00', 15600.00, 'cash_on_delivery', 'completed'),
@@ -373,21 +268,17 @@ INSERT INTO Payments (orderID, transactionDate, amount, paymentMethod, paymentSt
 (23, '2025-08-22 13:00:00', 2950.00, 'cash_on_delivery', 'pending'),
 (24, '2025-08-25 16:15:00', 2850.00, 'cash_on_delivery', 'pending'),
 (25, '2025-09-01 12:00:00', 1760.00, 'cash_on_delivery', 'pending');
-
--- Insert Cart items (Current items in users' carts)
 INSERT INTO Cart (userID, inventoryID, quantity, dateAdded) VALUES
-(7, 3, 1, '2025-09-05 10:30:00'), -- Walton TV
-(7, 5, 1, '2025-09-06 14:20:00'), -- Sony Headphones
-(8, 11, 1, '2025-09-04 16:45:00'), -- Saree
-(9, 17, 2, '2025-09-07 11:15:00'), -- Python Books
-(10, 22, 1, '2025-09-03 13:30:00'), -- Pressure Cooker
-(11, 29, 1, '2025-09-08 15:45:00'), -- Dumbbells
-(12, 8, 3, '2025-09-02 12:20:00'), -- Ladies Kurti
-(13, 14, 2, '2025-09-06 09:30:00'), -- Physics Books
-(14, 24, 1, '2025-09-05 17:15:00'), -- Table Fan
-(15, 27, 1, '2025-09-07 14:45:00'); -- Badminton Racket
-
--- Insert Product Reviews
+(7, 3, 1, '2025-09-05 10:30:00'), 
+(7, 5, 1, '2025-09-06 14:20:00'),
+(8, 11, 1, '2025-09-04 16:45:00'), 
+(9, 17, 2, '2025-09-07 11:15:00'),
+(10, 22, 1, '2025-09-03 13:30:00'),
+(11, 29, 1, '2025-09-08 15:45:00'),
+(12, 8, 3, '2025-09-02 12:20:00'),
+(13, 14, 2, '2025-09-06 09:30:00'),
+(14, 24, 1, '2025-09-05 17:15:00'),
+(15, 27, 1, '2025-09-07 14:45:00');
 INSERT INTO ProductReview (userID, productID, feedbackDate, rating, review) VALUES
 (7, 7, '2025-07-05 18:30:00', 5, 'Excellent quality cotton punjabi. Very comfortable and good stitching.'),
 (7, 13, '2025-07-06 19:15:00', 4, 'Good collection of Himu stories. My children loved it.'),
@@ -405,34 +296,27 @@ INSERT INTO ProductReview (userID, productID, feedbackDate, rating, review) VALU
 (18, 7, '2025-08-08 17:15:00', 5, 'Very comfortable punjabi for daily wear. Good fabric quality.'),
 (19, 14, '2025-08-12 19:45:00', 4, 'Physics book has clear explanations. Good for students.'),
 (20, 28, '2025-08-15 18:20:00', 5, 'Excellent yoga mat. Good thickness and anti-slip surface.');
-
--- Insert Wishlist items
 INSERT INTO Wishlist (userID, productID, dateAdded) VALUES
-(7, 2, '2025-08-20 10:30:00'), -- iPhone 15
-(7, 6, '2025-08-22 14:20:00'), -- Canon Camera
-(8, 4, '2025-08-18 16:45:00'), -- HP Laptop
-(9, 5, '2025-08-25 11:15:00'), -- Sony Headphones
-(10, 3, '2025-08-21 13:30:00'), -- Walton TV
-(11, 29, '2025-08-19 15:45:00'), -- Dumbbells
-(12, 11, '2025-08-23 12:20:00'), -- Jamdani Saree
-(13, 6, '2025-08-26 09:30:00'), -- Canon Camera
-(14, 2, '2025-08-24 17:15:00'), -- iPhone 15
-(15, 4, '2025-08-27 14:45:00'), -- HP Laptop
-(16, 29, '2025-08-20 16:30:00'), -- Dumbbells
-(17, 3, '2025-08-28 11:45:00'), -- Walton TV
-(18, 5, '2025-08-22 13:20:00'), -- Sony Headphones
-(19, 6, '2025-08-29 15:30:00'), -- Canon Camera
-(20, 2, '2025-08-25 12:15:00'); -- iPhone 15
-
--- Insert User Activity (Purchase, View, Wishlist activities)
+(7, 2, '2025-08-20 10:30:00'),
+(7, 6, '2025-08-22 14:20:00'),
+(8, 4, '2025-08-18 16:45:00'),
+(9, 5, '2025-08-25 11:15:00'),
+(10, 3, '2025-08-21 13:30:00'),
+(11, 29, '2025-08-19 15:45:00'),
+(12, 11, '2025-08-23 12:20:00'),
+(13, 6, '2025-08-26 09:30:00'),
+(14, 2, '2025-08-24 17:15:00'),
+(15, 4, '2025-08-27 14:45:00'),
+(16, 29, '2025-08-20 16:30:00'),
+(17, 3, '2025-08-28 11:45:00'),
+(18, 5, '2025-08-22 13:20:00'), 
+(19, 6, '2025-08-29 15:30:00'),
+(20, 2, '2025-08-25 12:15:00');
 INSERT INTO UserActivity (userID, inventoryID, activityType, activityDate) VALUES
--- Purchase activities (from orders)
 (7, 7, 'purchase', '2025-07-01 10:30:00'),
 (7, 12, 'purchase', '2025-07-01 10:30:00'),
 (8, 8, 'purchase', '2025-07-02 14:20:00'),
 (9, 1, 'purchase', '2025-07-03 09:15:00'),
-
--- View activities (browsing products)
 (7, 1, 'view', '2025-08-30 10:15:00'),
 (7, 2, 'view', '2025-08-30 10:16:00'),
 (7, 3, 'view', '2025-09-05 10:25:00'),
@@ -445,14 +329,10 @@ INSERT INTO UserActivity (userID, inventoryID, activityType, activityDate) VALUE
 (13, 4, 'view', '2025-09-06 09:20:00'),
 (14, 5, 'view', '2025-09-06 11:35:00'),
 (15, 6, 'view', '2025-09-07 13:50:00'),
-
--- Wishlist activities
 (7, 2, 'wishlist', '2025-08-20 10:30:00'),
 (8, 4, 'wishlist', '2025-08-18 16:45:00'),
 (9, 5, 'wishlist', '2025-08-25 11:15:00'),
 (10, 3, 'wishlist', '2025-08-21 13:30:00'),
-
--- More view activities for popular products
 (16, 1, 'view', '2025-09-01 12:30:00'),
 (17, 2, 'view', '2025-09-02 14:15:00'),
 (18, 3, 'view', '2025-09-03 16:20:00'),
