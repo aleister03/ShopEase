@@ -146,7 +146,6 @@ def forgot_password():
         user = execute_query("SELECT * FROM Users WHERE email = %s", (email,), fetch=True)
         
         if user:
-            # In a real app, send email with reset link
             flash('Reset link sent to your email', 'success')
         else:
             flash('Email not found', 'error')
