@@ -577,7 +577,6 @@ def customer_profile():
 @app.route('/customer/wishlist')
 @login_required('customer')
 def wishlist():
-    # FIXED: Get wishlisted products with the best available inventory option
     wishlist_items = execute_query("""
         SELECT w.productID, w.dateAdded,
                p.productName, p.productCategory, p.brand,
@@ -879,7 +878,6 @@ def seller_order_detail(order_id):
     return render_template('seller/order_detail.html', order=order[0], order_items=order_items)
 
 def get_seller_monthly_stats(seller_id):
-    """Get current month statistics for seller - Fixed to work with actual data"""
     current_month_start = datetime(2025, 8, 1)
     next_month = datetime(2025, 9, 1)
     
@@ -910,7 +908,6 @@ def get_seller_monthly_stats(seller_id):
     }
 
 def get_seller_simple_analytics(seller_id):
-    """Get comprehensive analytics for seller popup - Fixed version"""
     best_month = execute_query("""
         SELECT 
             MONTHNAME(o.orderDate) as month_name,
