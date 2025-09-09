@@ -1,4 +1,5 @@
-
+CREATE DATABASE ShopEaseDB;
+USE ShopEaseDB;
 CREATE TABLE Users (
     userID INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -161,4 +162,5 @@ CREATE TABLE UserActivity (
     INDEX idx_activity_type (activityType),
     INDEX idx_user_activity (userID, activityDate),
     INDEX idx_inventory_activity (inventoryID, activityDate)
+
 );
